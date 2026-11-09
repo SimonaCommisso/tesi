@@ -1,6 +1,6 @@
 import streamlit as st
 import plotly.express as px
-
+import pandas as pd
 from database import load_burnout
 
 st.set_page_config(
@@ -24,6 +24,7 @@ fig = px.pie(
     values="totale",
     title="Distribuzione rischio burnout"
 )
+st.plotly_chart(fig, use_container_width=True)
 st.divider()
 
 #============================================================

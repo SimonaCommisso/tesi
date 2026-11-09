@@ -29,6 +29,7 @@ fig = px.bar(
     y="probabilita_media_pensionamento",
     title="Probabilità media pensionamento per Regione"
 )
+st.plotly_chart(fig, use_container_width=True)
 st.divider()
 
 # ===========================================================
@@ -49,6 +50,7 @@ fig = px.bar(
     y="probabilita_media_pensionamento",
     title="Top 10 Enti a rischio pensionamento"
 )
+st.plotly_chart(fig, use_container_width=True)
 st.divider()
 
 # ===========================================================
@@ -63,9 +65,12 @@ fig = px.pie(
     values="totale",
     title="Distribuzione rischio pensionamento"
 )
-
+st.plotly_chart(fig, use_container_width=True)
 st.divider()
 
+# ==========================================================
+# DASHBOARD PENSIONAMENTO PER QUALIFICA
+# ============================================================
 st.subheader("Pensionamento per Qualifica")
 fig = px.bar(
     df.groupby("qualifica", as_index=False)
@@ -80,7 +85,7 @@ fig = px.bar(
     y="probabilita_media_pensionamento",
     title="Probabilità pensionamento per qualifica"
 )
+st.plotly_chart(fig, use_container_width=True)
+st.divider()
 
 st.page_link("streamlit_app.py", label="Torna alla Home", icon="🏠")
-
-

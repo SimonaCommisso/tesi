@@ -27,6 +27,7 @@ fig = px.box(
     color="categoria_skill",
     title="Impatto AI per categoria skill"
 )
+st.plotly_chart(fig, use_container_width=True)
 st.divider()
 
 # ============================================================
@@ -60,6 +61,7 @@ fig = px.bar(
     color="strategica",
     title="Indice di criticità delle competenze"
 )
+st.plotly_chart(fig, use_container_width=True)
 st.divider()
 
 # ============================================================
@@ -77,7 +79,7 @@ fig = px.bar(
     title="Competenze maggiormente a rischio perdita"
 )
 st.plotly_chart(fig, use_container_width=True)
-
+st.divider()
     
 st.page_link(
     "streamlit_app.py",
