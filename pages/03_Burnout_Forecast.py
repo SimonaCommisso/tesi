@@ -20,7 +20,7 @@ fig = px.pie(
     df.groupby(
         "livello_burnout"
     ).size().reset_index(name="totale"),
-    names="Livello Burnout",
+    names="livello_burnout",
     values="totale",
     title="Distribuzione rischio burnout"
 )
