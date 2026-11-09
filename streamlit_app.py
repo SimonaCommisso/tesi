@@ -1,14 +1,14 @@
 import streamlit as st
 import requests
 
-HOST = st.secrets["databricks"]["host"]
-TOKEN = st.secrets["databricks"]["token"]
-JOB_ID = st.secrets["databricks"]["job_id"]
-
 st.set_page_config(
     page_title="HR Analytics Dashboard",
     layout="wide"
 )
+
+HOST = st.secrets["databricks"]["host"]
+TOKEN = st.secrets["databricks"]["token"]
+JOB_ID = st.secrets["databricks"]["job_id"]
 
 st.title("🏛️ HR Analytics nella Pubblica Amministrazione")
 
