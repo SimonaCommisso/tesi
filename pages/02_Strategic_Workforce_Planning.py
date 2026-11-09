@@ -30,6 +30,6 @@ st.plotly_chart(
 st.divider()
     
 st.page_link(
-"streamlit_app.py",
+"home.py",
 label="Torna alla Home",
 icon="🏠")
