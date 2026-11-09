@@ -36,7 +36,7 @@ if "anno" in df.columns:
     st.divider()
     
     st.page_link(
-    "app.py",
+    "streamlit_app.py",
     label="Torna alla Home",
     icon="🏠")
 

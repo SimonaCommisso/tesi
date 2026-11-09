@@ -63,7 +63,11 @@ st.divider()
 
 st.subheader("📊 Dashboard Analitiche")
 
-col1, col2, col3 = st.columns(3)
+st.write("Test")
+
+
+
+""" col1, col2, col3 = st.columns(3)
 
 with col1:
 
@@ -99,7 +103,7 @@ with col3:
 
     st.caption(
         "Rischio burnout e benessere organizzativo."
-    )
+    ) """
 
 st.divider()
 
