@@ -10,7 +10,7 @@ st.set_page_config(
     layout="wide"
 )
 
-st.title("🏛️ HR Analytics Dashboard")
+st.title("🏛️ HR Analytics nella Pubblica Amministrazione")
 
 st.markdown("""
 Questa dashboard supporta l'analisi strategica delle risorse umane
@@ -23,11 +23,22 @@ della Pubblica Amministrazione attraverso:
 
 st.divider()
 
+# ============================================================
+# AGGIORNA MODELLI
+# ============================================================
+
 if st.button("🔄 Aggiorna Modelli"):
 
     url = f"https://{HOST}/api/2.1/jobs/run-now"
-    headers = {"Authorization": f"Bearer {TOKEN}"}
-    payload = {"job_id": JOB_ID}
+
+    headers = {
+        "Authorization": f"Bearer {TOKEN}"
+    }
+
+    payload = {
+        "job_id": JOB_ID
+    }
+
     response = requests.post(
         url,
         headers=headers,
@@ -35,7 +46,63 @@ if st.button("🔄 Aggiorna Modelli"):
     )
 
     if response.status_code == 200:
+
         st.success("Job avviato correttamente")
-        st.json(response.json())
+
     else:
-        st.error(f"Errore: {response.text}")
+
+        st.error(
+            f"Errore: {response.text}"
+        )
+
+st.divider()
+
+# ============================================================
+# NAVIGAZIONE
+# ============================================================
+
+st.subheader("📊 Dashboard Analitiche")
+
+col1, col2, col3 = st.columns(3)
+
+with col1:
+
+    st.page_link(
+        "pages/01_Forecast_Pensionamenti.py",
+        label="📈 Forecast Pensionamenti",
+        icon="📈"
+    )
+
+    st.caption(
+        "Analisi delle uscite previste e del turnover."
+    )
+
+with col2:
+
+    st.page_link(
+        "pages/02_Strategic_Workforce_Planning.py",
+        label="🧠 Workforce Planning",
+        icon="🧠"
+    )
+
+    st.caption(
+        "Skill gap, skill loss e competenze future."
+    )
+
+with col3:
+
+    st.page_link(
+        "pages/03_Burnout_Forecast.py",
+        label="🔥 Burnout Forecast",
+        icon="🔥"
+    )
+
+    st.caption(
+        "Rischio burnout e benessere organizzativo."
+    )
+
+st.divider()
+
+st.info(
+    "Seleziona una dashboard per visualizzare i risultati dei modelli HR Analytics."
+)

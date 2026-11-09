@@ -32,3 +32,12 @@ if "anno" in df.columns:
         fig,
         use_container_width=True
     )
+    
+    st.divider()
+    
+    st.page_link(
+    "app.py",
+    label="Torna alla Home",
+    icon="🏠")
+
+
