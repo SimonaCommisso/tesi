@@ -1,23 +1,41 @@
 import streamlit as st
+import requests
+
+HOST = st.secrets["databricks"]["host"]
+TOKEN = st.secrets["databricks"]["token"]
+JOB_ID = st.secrets["databricks"]["job_id"]
 
 st.set_page_config(
     page_title="HR Analytics Dashboard",
     layout="wide"
 )
 
-st.title("HR Analytics nella Pubblica Amministrazione")
+st.title("🏛️ HR Analytics Dashboard")
 
-st.markdown("---")
+st.markdown("""
+Questa dashboard supporta l'analisi strategica delle risorse umane
+della Pubblica Amministrazione attraverso:
 
-col1, col2, col3 = st.columns(3)
+- 📈 Forecast Pensionamenti
+- 🧠 Strategic Workforce Planning
+- 🔥 Burnout Risk Forecast
+""")
 
-with col1:
-    st.metric("Pensionamenti Previsti", "1.245")
+st.divider()
 
-with col2:
-    st.metric("Competenze Critiche", "37")
+if st.button("🔄 Aggiorna Modelli"):
 
-with col3:
-    st.metric("Dipendenti ad Alto Rischio Burnout", "842")
+    url = f"https://{HOST}/api/2.1/jobs/run-now"
+    headers = {"Authorization": f"Bearer {TOKEN}"}
+    payload = {"job_id": JOB_ID}
+    response = requests.post(
+        url,
+        headers=headers,
+        json=payload
+    )
 
-st.markdown("---")
+    if response.status_code == 200:
+        st.success("Job avviato correttamente")
+        st.json(response.json())
+    else:
+        st.error(f"Errore: {response.text}")
