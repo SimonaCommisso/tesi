@@ -88,4 +88,4 @@ fig = px.bar(
 st.plotly_chart(fig, use_container_width=True)
 st.divider()
 
-st.page_link("streamlit_app.py", label="Torna alla Home", icon="🏠")
+st.page_link("Home.py", label="Torna alla Home", icon="🏠")
