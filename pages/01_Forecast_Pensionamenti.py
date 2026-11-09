@@ -25,8 +25,8 @@ fig = px.bar(
           "probabilita_media_pensionamento",
           ascending=False
       ),
-    x="Regione",
-    y="Probabilità media pensionamento",
+    x="regione",
+    y="probabilita_media_pensionamento",
     title="Probabilità media pensionamento per Regione"
 )
 st.plotly_chart(fig, use_container_width=True)
@@ -46,8 +46,8 @@ fig = px.bar(
           ascending=False
       )
       .head(10),
-    x="Ente",
-    y="Probabilità media pensionamento",
+    x="ente",
+    y="probabilita_media_pensionamento",
     title="Top 10 Enti a rischio pensionamento"
 )
 st.plotly_chart(fig, use_container_width=True)
@@ -61,7 +61,7 @@ fig = px.pie(
     df.groupby(
         "livello_rischio"
     ).size().reset_index(name="totale"),
-    names="Livello Rischio",
+    names="livello_rischio",
     values="totale",
     title="Distribuzione rischio pensionamento"
 )
@@ -81,8 +81,8 @@ fig = px.bar(
           "probabilita_media_pensionamento",
           ascending=False
       ),
-    x="Qualifica",
-    y="Probabilità media pensionamento",
+    x="qualifica",
+    y="probabilita_media_pensionamento",
     title="Probabilità pensionamento per qualifica"
 )
 st.plotly_chart(fig, use_container_width=True)
