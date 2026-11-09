@@ -20,7 +20,7 @@ fig = px.pie(
     df.groupby(
         "livello_burnout"
     ).size().reset_index(name="totale"),
-    names="livello_burnout",
+    names="Livello Burnout",
     values="totale",
     title="Distribuzione rischio burnout"
 )
@@ -48,8 +48,8 @@ fig = px.bar(
         "fascia_eta",
         as_index=False
     )["probabilita_burnout"].mean(),
-    x="fascia_eta",
-    y="probabilita_burnout",
+    x="Fascia Età",
+    y="Probabilità Burnout",
     title="Burnout medio per fascia d'età"
 )
 st.plotly_chart(fig, use_container_width=True)
@@ -61,8 +61,8 @@ st.divider()
 st.subheader("Straordinari Vs Burnout")
 fig = px.scatter(
     df,
-    x="ore_straordinario_2025",
-    y="probabilita_burnout",
+    x="Ore Straordinario 2025",
+    y="Probabilità Burnout",
     color="livello_burnout",
     title="Straordinari e rischio burnout"
 )
@@ -75,8 +75,8 @@ st.divider()
 st.subheader("Performance Vs Burnout")
 fig = px.scatter(
     df,
-    x="performance_2025",
-    y="probabilita_burnout",
+    x="Performance 2025",
+    y="Probabilità Burnout",
     color="livello_burnout",
     title="Performance e rischio burnout"
 )

@@ -22,8 +22,8 @@ df_skill_loss = load_skill_loss()
 st.subheader("Dashboard Impatto AI")
 fig = px.box(
     df_ai_impact,
-    x="categoria_skill",
-    y="rischio_ai",
+    x="Categoria",
+    y="Rischio Impatto AI",
     color="categoria_skill",
     title="Impatto AI per categoria skill"
 )
@@ -39,8 +39,8 @@ fig = px.bar(
         "domanda_prevista",
         ascending=False
     ).head(15),
-    x="nome",
-    y="domanda_prevista",
+    x="Competenza",
+    y="Domanda Prevista",
     color="domanda_prevista",
     title="Competenze future con maggiore crescita"
 )
@@ -56,8 +56,8 @@ fig = px.bar(
         "indice_criticita",
         ascending=False
     ).head(15),
-    x="nome",
-    y="indice_criticita",
+    x="Competenza",
+    y="Indice Criticita",
     color="strategica",
     title="Indice di criticità delle competenze"
 )
@@ -73,8 +73,8 @@ fig = px.bar(
         "percentuale_perdita",
         ascending=False
     ).head(15),
-    x="nome",
-    y="percentuale_perdita",
+    x="Nome",
+    y="Percentuale Perdita",
     color="indice_criticita_sostituzione",
     title="Competenze maggiormente a rischio perdita"
 )
