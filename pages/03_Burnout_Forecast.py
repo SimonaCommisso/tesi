@@ -11,40 +11,40 @@ st.dataframe(df)
 
 st.write(df.columns.tolist())
 
-if "livello_burnout" in df.columns:
+# if "livello_burnout" in df.columns:
 
-    burnout = (
+#     burnout = (
 
-        df
+#         df
 
-        .groupby(
-            "livello_burnout"
-        )
+#         .groupby(
+#             "livello_burnout"
+#         )
 
-        .size()
+#         .size()
 
-        .reset_index(
-            name="totale"
-        )
+#         .reset_index(
+#             name="totale"
+#         )
 
-    )
+#     )
 
-    fig = px.pie(
+#     fig = px.pie(
 
-        burnout,
+#         burnout,
 
-        names="livello_burnout",
+#         names="livello_burnout",
 
-        values="totale",
+#         values="totale",
 
-        title="Distribuzione rischio burnout"
+#         title="Distribuzione rischio burnout"
 
-    )
+#     )
 
-    st.plotly_chart(
-        fig,
-        use_container_width=True
-    )
+#     st.plotly_chart(
+#         fig,
+#         use_container_width=True
+#     )
     
 st.divider()
 
