@@ -5,46 +5,77 @@ from database import load_ai_impact, load_future_skills, load_skill_critiche, lo
 
 st.title("🧠 Strategic Workforce Planning")
 
-st.subheader("📊 Dashboard Impatto AI")
+## Caricamento dei dati dai modelli di Machine Learning
 df_ai_impact = load_ai_impact()
-st.dataframe(df_ai_impact)
-st.write(df_ai_impact.columns.tolist())
-st.divider
-
-st.subheader("📊 Dashboard Competenze Future")
 df_future_skills = load_future_skills()
-st.dataframe(df_future_skills)
-st.write(df_future_skills.columns.tolist())
-st.divider()
-
-st.subheader("📊 Dashboard Competenze Critiche")
 df_skill_critiche = load_skill_critiche()
-st.dataframe(df_skill_critiche)
-st.write(df_skill_critiche.columns.tolist())
-st.divider()
-
-st.subheader("📊 Dashboard Perdita di Competenze")
 df_skill_loss = load_skill_loss()
-st.dataframe(df_skill_loss)
-st.write(df_skill_loss.columns.tolist())
+
+# ============================================================
+# DASHBOARD IMPATTO AI
+# ============================================================
+st.subheader("Dashboard Impatto AI")
+fig = px.box(
+    df_ai_impact,
+    x="categoria_skill",
+    y="rischio_ai",
+    color="categoria_skill",
+    title="Impatto AI per categoria skill"
+)
 st.divider()
 
-
-# fig = px.bar(
-#     df_ai_impact.head(10),
-#     x="nome",
-#     y="indice_criticita_sostituzione",
-#     title="Competenze più critiche"
-# )
-
-# st.plotly_chart(
-#     fig,
-#     use_container_width=True
-# )
-
+# ============================================================
+# DASHBOARD COMPETENZE FUTURE
+# ============================================================
+st.subheader("Dashboard Competenze Future")
+fig = px.bar(
+    df_future_skills.sort_values(
+        "domanda_prevista",
+        ascending=False
+    ).head(15),
+    x="nome",
+    y="domanda_prevista",
+    color="categoria_skill",
+    title="Competenze future con maggiore crescita"
+)
+st.plotly_chart(fig, use_container_width=True)
 st.divider()
+
+# ============================================================
+# DASHBOARD COMPETENZE CRITICHE
+# ============================================================
+st.subheader("Dashboard Competenze Critiche")
+fig = px.bar(
+    df_skill_critiche.sort_values(
+        "indice_criticita",
+        ascending=False
+    ).head(15),
+    x="nome",
+    y="indice_criticita",
+    color="strategica",
+    title="Indice di criticità delle competenze"
+)
+st.divider()
+
+# ============================================================
+# DASHBOARD PERDITA DI COMPETENZE
+# ============================================================
+st.subheader("Dashboard Perdita di Competenze")
+fig = px.bar(
+    df_skill_loss.sort_values(
+        "percentuale_perdita",
+        ascending=False
+    ).head(15),
+    x="nome",
+    y="percentuale_perdita",
+    color="indice_criticita_sostituzione",
+    title="Competenze maggiormente a rischio perdita"
+)
+st.plotly_chart(fig, use_container_width=True)
+
     
 st.page_link(
-"streamlit_app.py",
-label="Torna alla Home",
-icon="🏠")
+    "streamlit_app.py",
+    label="Torna alla Home",
+    icon="🏠"
+)
