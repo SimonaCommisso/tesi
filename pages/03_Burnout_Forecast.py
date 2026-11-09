@@ -84,7 +84,7 @@ st.plotly_chart(fig, use_container_width=True)
 st.divider()
 
 st.page_link(
-    "Home.py",
+    "streamlit_app.py",
     label="Torna alla Home",
     icon="🏠"
 )
