@@ -12,6 +12,9 @@ st.title("📈 Forecast Pensionamenti")
 
 df = load_pensionamenti()
 
+#============================================================
+# DASHBOARD PENSIONAMENTI
+# ============================================================
 st.subheader("Pensionamento medio per Regione")
 fig = px.bar(
     df.groupby("regione", as_index=False)
@@ -26,9 +29,11 @@ fig = px.bar(
     y="probabilita_media_pensionamento",
     title="Probabilità media pensionamento per Regione"
 )
-
 st.divider()
 
+# ===========================================================
+# DASHBOARD TOP ENTI A RISCHIO
+# ============================================================
 st.subheader("Top Enti a rischio")
 fig = px.bar(
     df.groupby("ente", as_index=False)
@@ -44,9 +49,11 @@ fig = px.bar(
     y="probabilita_media_pensionamento",
     title="Top 10 Enti a rischio pensionamento"
 )
-    
 st.divider()
 
+# ===========================================================
+# DASHBOARD DISTRIBUZIONE RISCHIO
+# ============================================================
 st.subheader("Distribuzione livello rischio")
 fig = px.pie(
     df.groupby(

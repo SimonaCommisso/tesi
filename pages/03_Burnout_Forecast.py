@@ -3,6 +3,11 @@ import plotly.express as px
 
 from database import load_burnout
 
+st.set_page_config(
+    page_title="Forecast Burnout",
+    layout="wide"
+)
+
 st.title("🔥 Burnout Forecast")
 
 df = load_burnout()

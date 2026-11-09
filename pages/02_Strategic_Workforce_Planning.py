@@ -3,6 +3,11 @@ import plotly.express as px
 
 from database import load_ai_impact, load_future_skills, load_skill_critiche, load_skill_loss
 
+st.set_page_config(
+    page_title="Forecast Workforce Planning",
+    layout="wide"
+)
+
 st.title("🧠 Strategic Workforce Planning")
 
 ## Caricamento dei dati dai modelli di Machine Learning
@@ -35,7 +40,7 @@ fig = px.bar(
     ).head(15),
     x="nome",
     y="domanda_prevista",
-    color="categoria_skill",
+    color="domanda_prevista",
     title="Competenze future con maggiore crescita"
 )
 st.plotly_chart(fig, use_container_width=True)
