@@ -65,45 +65,43 @@ st.subheader("📊 Dashboard Analitiche")
 
 st.write("Test")
 
+# col1, col2, col3 = st.columns(3)
 
+# with col1:
 
-""" col1, col2, col3 = st.columns(3)
+#     st.page_link(
+#         "pages/01_Forecast_Pensionamenti.py",
+#         label="📈 Forecast Pensionamenti",
+#         icon="📈"
+#     )
 
-with col1:
+#     st.caption(
+#         "Analisi delle uscite previste e del turnover."
+#     )
 
-    st.page_link(
-        "pages/01_Forecast_Pensionamenti.py",
-        label="📈 Forecast Pensionamenti",
-        icon="📈"
-    )
+# with col2:
 
-    st.caption(
-        "Analisi delle uscite previste e del turnover."
-    )
+#     st.page_link(
+#         "pages/02_Strategic_Workforce_Planning.py",
+#         label="🧠 Workforce Planning",
+#         icon="🧠"
+#     )
 
-with col2:
+#     st.caption(
+#         "Skill gap, skill loss e competenze future."
+#     )
 
-    st.page_link(
-        "pages/02_Strategic_Workforce_Planning.py",
-        label="🧠 Workforce Planning",
-        icon="🧠"
-    )
+# with col3:
 
-    st.caption(
-        "Skill gap, skill loss e competenze future."
-    )
+#     st.page_link(
+#         "pages/03_Burnout_Forecast.py",
+#         label="🔥 Burnout Forecast",
+#         icon="🔥"
+#     )
 
-with col3:
-
-    st.page_link(
-        "pages/03_Burnout_Forecast.py",
-        label="🔥 Burnout Forecast",
-        icon="🔥"
-    )
-
-    st.caption(
-        "Rischio burnout e benessere organizzativo."
-    ) """
+#     st.caption(
+#         "Rischio burnout e benessere organizzativo."
+#     )
 
 st.divider()
 
