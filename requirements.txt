@@ -1,5 +1,5 @@
 streamlit
 pandas
 requests
-databricks-sql-connector
 plotly
+databricks-sql-connector
