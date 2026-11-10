@@ -8,6 +8,10 @@ st.set_page_config(
     layout="wide"
 )
 
+if not st.session_state.get("logged",False):
+    st.warning("Effettuare il login")
+    st.stop()
+
 st.title("🧠 Strategic Workforce Planning")
 
 ## Caricamento dei dati dai modelli di Machine Learning
@@ -82,7 +86,7 @@ st.plotly_chart(fig, use_container_width=True)
 st.divider()
     
 st.page_link(
-    "streamlit_app.py",
+    "home.py",
     label="Torna alla Home",
     icon="🏠"
 )
