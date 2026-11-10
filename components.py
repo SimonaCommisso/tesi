@@ -23,29 +23,29 @@ def topbar():
 
     with col1:
         st.markdown("""
-            <h2 style="
+            <h6 style="
                 margin-top:10px;
                 color:#1d3673;
                 font-weight:700;
             ">
             🏛️ HR Analytics Dashboard
-            </h2>
+            </h6>
             """, unsafe_allow_html=True)
 
     with col2:
-        if st.button("🏠 Home", use_container_width=True):
+        if st.link_button("🏠 Home", use_container_width=True):
             st.switch_page("pages/01_Home.py")
 
     with col3:
-        if st.button("📈 Pensionamenti", use_container_width=True):
+        if st.link_button("📈 Pensionamenti", use_container_width=True):
             st.switch_page("pages/02_Forecast_Pensionamenti.py")
 
     with col4:
-        if st.button("🧠 Workforce", use_container_width=True):
+        if st.link_button("🧠 Workforce", use_container_width=True):
             st.switch_page("pages/03_Strategic_Workforce_Planning.py")
 
     with col5:
-        if st.button("🔥 Burnout", use_container_width=True):
+        if st.link_button("🔥 Burnout", use_container_width=True):
             st.switch_page("pages/04_Burnout_Forecast.py")
 
     with col6:
@@ -60,7 +60,7 @@ def topbar():
                 if "ente_nome" in st.session_state:
                     st.write(f"**Ente:** {st.session_state.ente_nome}")
             st.divider()
-            if st.button("🚪 Logout", key="logout_btn"):
+            if st.link_button("🚪 Logout", key="logout_btn"):
                 st.session_state.clear()
                 st.switch_page("streamlit_app.py")
 
