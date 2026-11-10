@@ -38,20 +38,31 @@ def topbar():
         }
 
         /* LINK DI NAVIGAZIONE */
-        .st-key-topbar [data-testid="stPageLink"] a {
-            background-color: #16336f;
-            color: #ffffff !important;
-            border-radius: 7px;
-            border: none;
-            padding: 12px 5px;
-            justify-content: center;
+        .st-key-topbar [data-testid="stPageLink"] a,
+        .st-key-topbar [data-testid="stPageLink"] a *,
+        .st-key-topbar [data-testid="stPageLink"] a p,
+        .st-key-topbar [data-testid="stPageLink"] a span,
+        .st-key-topbar [data-testid="stPageLink"] a div {
+            color: #FFFFFF !important;
+            -webkit-text-fill-color: #FFFFFF !important;
             text-decoration: none !important;
-            font-weight: 600;
-            transition: background-color 0.2s;
+            font-weight: 600 !important;
         }
 
-        .st-key-topbar [data-testid="stPageLink"] a:hover {
-            background-color: #294d91;
+        /* SFONDO E DIMENSIONI */
+        .st-key-topbar [data-testid="stPageLink"] a {
+            background-color: #16336f !important;
+            border-radius: 7px;
+            padding: 12px 5px;
+            justify-content: center;
+        }
+
+        /* HOVER */
+        .st-key-topbar [data-testid="stPageLink"] a:hover,
+        .st-key-topbar [data-testid="stPageLink"] a:hover * {
+            background-color: #294d91 !important;
+            color: #FFFFFF !important;
+            -webkit-text-fill-color: #FFFFFF !important; 
         }
 
         /* POPOVER UTENTE */
@@ -61,6 +72,12 @@ def topbar():
             border: 1px solid #52678e;
             border-radius: 7px;
             min-height: 52px;
+        }
+        
+        .st-key-topbar button[data-testid="stPopoverButton"],
+        .st-key-topbar button[data-testid="stPopoverButton"] * {
+            color: #FFFFFF !important;
+            -webkit-text-fill-color: #FFFFFF !important;
         }
 
         .st-key-topbar button[data-testid="stPopoverButton"]:hover {
