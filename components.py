@@ -1,99 +1,111 @@
 import streamlit as st
 
 def topbar():
+
     st.markdown("""
     <style>
-        /* Nasconde sidebar e header nativo */
-        section[data-testid="stSidebar"] { display: none; }
-        button[kind="header"] { display: none; }
-        .block-container { padding-top: 1rem; max-width: 100%; }
 
-        /* Barra superiore unificata */
-        .topbar-wrapper {
-            background-color: #0f2454;
-            padding: 20px;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        /* Nasconde sidebar e header */
+        section[data-testid="stSidebar"] {
+            display: none;
         }
 
-        /* Titolo centrato all'interno della barra */
-        .topbar-title {
-            color: #ffffff !important;
+        button[kind="header"] {
+            display: none;
+        }
+
+        .block-container {
+            padding-top: 0.5rem;
+        }
+
+        /* Navbar principale */
+        .navbar {
+            background: #0f2454;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+
+        /* Titolo */
+        .navbar-title {
+            color: white;
             text-align: center;
-            font-size: 28px;
+            padding: 18px;
+            font-size: 32px;
             font-weight: 700;
-            margin-bottom: 20px;
         }
 
-        /* Stile dei link di navigazione (st.page_link) dentro la barra */
-        div[data-testid="stPageLink"] a {
-            background-color: #1a366e !important;
-            color: #ffffff !important;
-            border: 1px solid rgba(255, 255, 255, 0.2) !important;
-            border-radius: 8px !important;
-            text-align: center !important;
-            font-weight: 600 !important;
-            width: 100% !important;
-            padding: 10px 8px !important;
-            box-sizing: border-box;
-            text-decoration: none !important;
-        }
-        
-        div[data-testid="stPageLink"] a:hover {
-            background-color: #27498c !important;
-            border-color: rgba(255, 255, 255, 0.5) !important;
-        }
-
-        /* Allineamento a destra del blocco utente */
-        .user-col {
+        /* Riga menu */
+        .navbar-menu {
             display: flex;
-            justify-content: flex-end;
             align-items: center;
-            height: 100%;
+            justify-content: space-between;
+            padding: 10px 20px;
+            background: #16336f;
+            gap: 10px;
         }
+
+        /* Link */
+        .navbar-menu a {
+            color: white !important;
+            text-decoration: none !important;
+            font-size: 15px;
+            font-weight: 600;
+            padding: 12px 15px;
+            border-radius: 6px;
+            text-align: center;
+            flex: 1;
+            white-space: nowrap;
+            transition: background 0.2s;
+        }
+
+        .navbar-menu a:hover {
+            background: #294d91;
+        }
+
+        /* Profilo utente */
+        .navbar-menu .user-link {
+            flex: 0;
+            margin-left: auto;
+            border: 1px solid #ffffff55;
+            border-radius: 50%;
+            min-width: 42px;
+        }
+
     </style>
     """, unsafe_allow_html=True)
 
-    # Apriamo il contenitore visivo con lo sfondo blu
-    st.markdown('<div class="topbar-wrapper">', unsafe_allow_html=True)
-    
-    # Titolo
-    st.markdown('<div class="topbar-title">🏛️ HR Analytics Dashboard</div>', unsafe_allow_html=True)
+    nome = st.session_state.nome
+    cognome = st.session_state.cognome
 
-    # Colonne per i link e il menu utente
-    col1, col2, col3, col4, col5 = st.columns([2, 2, 2, 2, 1], gap="small")
+    st.markdown(f"""
+        <div class="navbar">
 
-    with col1:
-        st.page_link("pages/01_Home.py", label="🏠 Home")
+            <div class="navbar-title">
+                🏛️ HR Analytics Dashboard
+            </div>
 
-    with col2:
-        st.page_link("pages/02_Forecast_Pensionamenti.py", label="⏳ Pensionamenti")
+            <div class="navbar-menu">
 
-    with col3:
-        st.page_link("pages/03_Strategic_Workforce_Planning.py", label="📊 Workforce Planning")
+                <a href="/" target="_self">Home</a>
 
-    with col4:
-        st.page_link("pages/04_Burnout_Forecast.py", label="🔥 Burnout Forecast")
+                <a href="/Forecast_Pensionamenti" target="_self">
+                    Pensionamenti
+                </a>
 
-    with col5:
-        st.markdown('<div class="user-col">', unsafe_allow_html=True)
-        with st.popover("👤"):
-            nome = st.session_state.get("nome", "")
-            cognome = st.session_state.get("cognome", "")
-            ruolo = st.session_state.get("ruolo", "Utente")
-            
-            st.write(f"**Utente:** {nome} {cognome}")
-            if ruolo == "Admin":
-                st.write("**Ruolo:** Admin")
-            else:
-                st.write(f"**Ente:** {ruolo}")
-            st.divider()
+                <a href="/Strategic_Workforce_Planning" target="_self">
+                    Workforce Planning
+                </a>
 
-            if st.button("Logout", key="logout_button_topbar"):
-                st.session_state.clear()
-                st.switch_page("streamlit_app.py")
-        st.markdown('</div>', unsafe_allow_html=True)
+                <a href="/Burnout_Forecast" target="_self">
+                    Burnout Forecast
+                </a>
 
-    # Chiudiamo il contenitore blu
-    st.markdown('</div>', unsafe_allow_html=True)
+                <a href="#" class="user-link" title="{nome} {cognome}">
+                    👤
+                </a>
+
+            </div>
+
+        </div>
+    """, unsafe_allow_html=True)
