@@ -2,9 +2,10 @@ import streamlit as st
 
 def topbar():
 
-    # Nasconde sidebar e hamburger menu
+    # Nasconde sidebar e menu streamlit
     st.markdown("""
     <style>
+
         section[data-testid="stSidebar"] {
             display: none;
         }
@@ -14,54 +15,65 @@ def topbar():
         }
 
         .block-container {
-            padding-top: 1rem;
+            padding-top: 0.8rem;
         }
-    </style>""", unsafe_allow_html=True)
 
-    # Barra di navigazione
-    col1, col2, col3, col4, col5, col6 = st.columns([4, 2, 2, 2, 2, 1])
+    </style>
+    """, unsafe_allow_html=True)
+
+    # Titolo centrale
+    st.markdown(
+        """
+        <div style="
+            background:#0f2454;
+            color:white;
+            text-align:center;
+            padding:18px;
+            border-radius:10px 10px 0 0;
+            font-size:30px;
+            font-weight:700;
+        ">
+            🏛️ HR Analytics Dashboard
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
+    # Menu navigazione
+    col1, col2, col3, col4, col5 = st.columns(
+        [2, 2, 2, 2, 1]
+    )
 
     with col1:
-        st.markdown("""
-            <h6 style="
-                margin-top:10px;
-                color:#1d3673;
-                font-weight:700;
-            ">
-            🏛️ HR Analytics Dashboard
-            </h6>
-            """, unsafe_allow_html=True)
-
-    with col2:
-        if st.link_button("🏠 Home", use_container_width=True):
+        if st.button("Home", use_container_width=True):
             st.switch_page("pages/01_Home.py")
 
-    with col3:
-        if st.link_button("📈 Pensionamenti", use_container_width=True):
+    with col2:
+        if st.button("Pensionamenti", use_container_width=True):
             st.switch_page("pages/02_Forecast_Pensionamenti.py")
 
-    with col4:
-        if st.link_button("🧠 Workforce", use_container_width=True):
+    with col3:
+        if st.button("Workforce Planning", use_container_width=True):
             st.switch_page("pages/03_Strategic_Workforce_Planning.py")
 
-    with col5:
-        if st.link_button("🔥 Burnout", use_container_width=True):
+    with col4:
+        if st.button("Burnout Forecast", use_container_width=True):
             st.switch_page("pages/04_Burnout_Forecast.py")
 
-    with col6:
+    with col5:
         with st.popover("👤"):
-            st.markdown("### Profilo")
+            st.markdown("### Profilo Utente")
             st.write(f"**Nome:** {st.session_state.nome}")
             st.write(f"**Cognome:** {st.session_state.cognome}")
-            if st.session_state.ruolo == "Admin":
+
+            if st.session_state.ruolo == "Amin":
                 st.write("**Ruolo:** Admin")
             else:
-                st.write(f"**Ruolo:** {st.session_state.ruolo}")
-                if "ente_nome" in st.session_state:
-                    st.write(f"**Ente:** {st.session_state.ente_nome}")
+                st.write(f"**Ente:** {st.session_state.ruolo}")
             st.divider()
-            if st.link_button("🚪 Logout", key="logout_btn"):
+
+            if st.button("Logout", key="logout_button"):
                 st.session_state.clear()
                 st.switch_page("streamlit_app.py")
 
-    st.divider()
+    st.markdown("<hr>", unsafe_allow_html=True)
