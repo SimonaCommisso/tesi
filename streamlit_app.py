@@ -50,20 +50,26 @@ if not st.session_state.logged:
         ]
 
         if len(user) == 1:
+
             user = user.iloc[0]
+
             st.session_state.logged = True
             st.session_state.nome = user["nome"]
             st.session_state.cognome = user["cognome"]
             st.session_state.ruolo = user["ruolo"]
             st.session_state.ente_id = user["ente_id"]
-            
-            # Recupero informazioni dell'ente
-            if user["ruolo"] != "Admin":
+
+            # Regione e provincia dalla tabella app_user
+            st.session_state.regione = user["regione"]
+            st.session_state.provincia = user["provincia"]
+
+            # Recupero nome ente da dim_ente
+            if user["ente_id"] is not None:
 
                 conn = get_connection()
 
                 query = """
-                    SELECT ente_nome, regione, provincia
+                    SELECT nome AS ente_nome
                     FROM tesi.pubblica_amministrazione_tesi.dim_ente
                     WHERE ente_id = ?
                 """
@@ -80,13 +86,14 @@ if not st.session_state.logged:
                     st.stop()
 
                 st.session_state.ente = ente.iloc[0]["ente_nome"]
-                st.session_state.regione = ente.iloc[0]["regione"]
-                st.session_state.provincia = ente.iloc[0]["provincia"]
-
-                st.switch_page("pages/01_Home.py")
 
             else:
-                st.error("Credenziali non valide")
+                st.session_state.ente = None
+
+            st.switch_page("pages/01_Home.py")
+
+        else:
+            st.error("Credenziali non valide")
 
     st.stop()
 
