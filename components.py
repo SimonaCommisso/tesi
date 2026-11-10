@@ -133,21 +133,28 @@ def topbar():
             )
 
         with col5:
-            with st.popover(" ", use_container_width=True, icon=":material/account_circle:"):
+            with st.popover(" ",
+                use_container_width=True,
+                icon=":material/account_circle:"):
 
                 st.write(
                     f"**Utente:** {st.session_state.nome} "
                     f"{st.session_state.cognome}"
                 )
 
-                if st.session_state.ruolo == "Admin":
-                    st.write("**Ruolo:** Admin")
-                else:
-                    st.write(f"**Ruolo:** {st.session_state.ruolo}")
-                    st.write(f"**Ente:** {st.session_state.ente}")
+                ruolo = st.session_state.ruolo
+
+                st.write(f"**Ruolo:** {ruolo}")
+
+                if ruolo == "Visualizzatore Regionale":
                     st.write(f"**Regione:** {st.session_state.regione}")
-                    if st.session_state.ruolo == "Visualizzatore Provinciale":
-                        st.write(f"**Provincia:** {st.session_state.provincia}")
+
+                elif ruolo == "Visualizzatore Provinciale":
+                    st.write(f"**Regione:** {st.session_state.regione}")
+                    st.write(f"**Provincia:** {st.session_state.provincia}")
+
+                elif ruolo != "Admin":
+                    st.write(f"**Ente:** {st.session_state.ente}")
 
                 st.divider()
 
