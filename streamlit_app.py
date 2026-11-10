@@ -21,7 +21,7 @@ if not st.session_state.logged:
         user = users[
             (users["username"] == username)
             &
-            (users["password"] == password)
+            (users["password_hash"] == password)
         ]
 
         if len(user) == 1:
