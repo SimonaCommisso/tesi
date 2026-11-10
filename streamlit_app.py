@@ -1,5 +1,5 @@
 import streamlit as st
-
+import hashlib
 from database import load_users
 
 # ============================================================
@@ -18,10 +18,12 @@ if not st.session_state.logged:
 
     if st.button("Accedi"):
         users = load_users()
+        password_hash = hashlib.sha256(password.encode()).hexdigest()
+        
         user = users[
             (users["username"] == username)
             &
-            (users["password_hash"] == password)
+            (users["password_hash"] == password_hash)
         ]
 
         if len(user) == 1:
