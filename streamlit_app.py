@@ -10,6 +10,19 @@ if "logged" not in st.session_state:
     st.session_state.logged = False
 
 if not st.session_state.logged:
+    # Nascondo il menu laterale durante il login
+    st.markdown("""
+    <style>
+        section[data-testid="stSidebar"] {
+            display: none;
+        }
+
+        button[kind="header"] {
+            display: none;
+        }
+    </style>
+    """, unsafe_allow_html=True)
+    
     st.title("🔐 Login")
 
     username = st.text_input("Username")
@@ -33,7 +46,7 @@ if not st.session_state.logged:
             st.session_state.cognome = user["cognome"]
             st.session_state.ruolo = user["ruolo"]
             st.session_state.ente_id = user["ente_id"]
-            st.rerun()
+            st.switch_page("pages/home.py")
 
         else:
             st.error("Credenziali non valide")

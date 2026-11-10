@@ -8,11 +8,13 @@ from database import load_last_refresh
 # CONFIGURAZIONE
 # ============================================================
 
-st.set_page_config(
-    page_title="HR Analytics Dashboard",
-    layout="wide"
-)
+if not st.session_state.get("logged",False):
+    st.switch_page("streamlit_app.py")
 
+
+# ===========================================================
+## DATI DI CONNESSIONE A DATABRICKS
+# ============================================================ 
 HOST = st.secrets["databricks"]["host"]
 TOKEN = st.secrets["databricks"]["token"]
 JOB_ID = st.secrets["databricks"]["job_id"]
@@ -21,7 +23,7 @@ HTTP_PATH = st.secrets["databricks"]["sql_warehouse_path"]
 # ============================================================
 # TITOLO
 # ============================================================
-
+st.set_page_config(page_title="HR Analytics Dashboard", layout="wide")
 st.title("🏛️ HR Analytics nella Pubblica Amministrazione")
 
 #===========================================================
@@ -29,16 +31,14 @@ st.title("🏛️ HR Analytics nella Pubblica Amministrazione")
 #===========================================================
 col1, col2 = st.columns([8,1])
 with col1:
-
-    st.success(
-        f"""Utente: {st.session_state.nome} {st.session_state.cognome}
-        Ruolo: {st.session_state.ruolo} """
-    )
+    st.success(f"""Benvenuto {st.session_state.nome} {st.session_state.cognome}
+    Ruolo: {st.session_state.ruolo}"""
+)
 
 with col2:
     if st.button("Logout"):
         st.session_state.clear()
-        st.rerun()
+        st.switch_page("streamlit_app.py")
 
 # ============================================================
 # ULTIMO AGGIORNAMENTO

@@ -8,8 +8,7 @@ st.set_page_config(
 )
 
 if not st.session_state.get("logged",False):
-    st.warning("Effettuare il login")
-    st.stop()
+    st.switch_page("streamlit_app.py")
 
 st.title("📈 Forecast Pensionamenti")
 
