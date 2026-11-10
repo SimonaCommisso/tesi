@@ -44,8 +44,6 @@ st.success(f"""Benvenuto {st.session_state.nome} {st.session_state.cognome} - En
 
 try:
     ultima_data = load_last_refresh()
-    st.write(type(ultima_data))
-    st.write(ultima_data)
     if ultima_data is not None:
         ultima_data = pd.to_datetime(ultima_data).strftime("%d/%m/%Y %H:%M:%S")
         st.success(f"🕒 Ultimo aggiornamento modelli: {ultima_data}")
