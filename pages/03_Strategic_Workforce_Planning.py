@@ -1,15 +1,21 @@
 import streamlit as st
 import plotly.express as px
-
+from components import topbar
 from database import load_ai_impact, load_future_skills, load_skill_critiche, load_skill_loss
 
-st.set_page_config(
-    page_title="Forecast Workforce Planning",
-    layout="wide"
-)
-
+# ============================================================
+# CONTROLLO LOGIN
+# ============================================================
 if not st.session_state.get("logged",False):
     st.switch_page("streamlit_app.py")
+
+# ============================================================
+# CONFIGURAZIONE PAGINA
+# ============================================================
+st.set_page_config(page_title="Forecast Workforce Planning",layout="wide")
+
+# Caricamento topbar
+topbar()
 
 st.title("🧠 Strategic Workforce Planning")
 

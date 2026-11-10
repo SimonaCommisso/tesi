@@ -2,17 +2,25 @@ import streamlit as st
 import plotly.express as px
 import pandas as pd
 from database import load_burnout
+from components import topbar
 
-st.set_page_config(
-    page_title="Forecast Burnout",
-    layout="wide"
-)
-
+# ============================================================
+# CONTROLLO LOGIN
+# ============================================================
 if not st.session_state.get("logged",False):
     st.switch_page("streamlit_app.py")
 
+# ============================================================
+# CONFIGURAZIONE PAGINA
+# ============================================================
+st.set_page_config(page_title="Forecast Workforce Planning",layout="wide")
+
+# Caricamento topbar
+topbar()
+
 st.title("🔥 Burnout Forecast")
 
+# Carico i dati dai modelli di Machine Learning
 df = load_burnout()
 
 # ============================================================

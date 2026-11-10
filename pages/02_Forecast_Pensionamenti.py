@@ -1,17 +1,25 @@
 import streamlit as st
 import plotly.express as px
 from database import load_pensionamenti
+from components import topbar
 
-st.set_page_config(
-    page_title="Forecast Pensionamenti",
-    layout="wide"
-)
-
+#===========================================================
+# CONTROLLO LOGIN
+#===========================================================
 if not st.session_state.get("logged",False):
     st.switch_page("streamlit_app.py")
+    
+#===========================================================
+# CONFIGURAZIONE PAGINA
+#===========================================================
+st.set_page_config(page_title="Forecast Pensionamenti", layout="wide")
+
+# Caricamento topbar
+topbar()
 
 st.title("📈 Forecast Pensionamenti")
 
+# Carico i dati dai modelli di Machine Learning
 df = load_pensionamenti()
 
 #============================================================

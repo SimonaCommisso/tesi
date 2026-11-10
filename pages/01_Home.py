@@ -1,7 +1,7 @@
 import streamlit as st
 import requests
 import pandas as pd
-
+from components import topbar
 from database import load_last_refresh
 
 # ============================================================
@@ -10,7 +10,6 @@ from database import load_last_refresh
 
 if not st.session_state.get("logged",False):
     st.switch_page("streamlit_app.py")
-
 
 # ===========================================================
 ## DATI DI CONNESSIONE A DATABRICKS
@@ -21,24 +20,23 @@ JOB_ID = st.secrets["databricks"]["job_id"]
 HTTP_PATH = st.secrets["databricks"]["sql_warehouse_path"]
 
 # ============================================================
-# TITOLO
+# CONFIGURAZIONE PAGINA
 # ============================================================
 st.set_page_config(page_title="HR Analytics Dashboard", layout="wide")
-st.title("🏛️ HR Analytics nella Pubblica Amministrazione")
+
+topbar()
+
+if st.button("Logout"):
+        st.session_state.clear()
+        st.switch_page("streamlit_app.py")
+
+st.title("🏛️ Home")
 
 #===========================================================
 # DATI UTENTE LOGGATO
 #===========================================================
-col1, col2 = st.columns([8,1])
-with col1:
-    st.success(f"""Benvenuto {st.session_state.nome} {st.session_state.cognome}
-    Ruolo: {st.session_state.ruolo}"""
-)
+st.success(f"""Benvenuto {st.session_state.nome} {st.session_state.cognome} - Ente di provenienza: {st.session_state.ruolo}""")
 
-with col2:
-    if st.button("Logout"):
-        st.session_state.clear()
-        st.switch_page("streamlit_app.py")
 
 # ============================================================
 # ULTIMO AGGIORNAMENTO
@@ -46,6 +44,8 @@ with col2:
 
 try:
     ultima_data = load_last_refresh()
+    st.write(type(ultima_data))
+    st.write(ultima_data)
     if ultima_data is not None:
         ultima_data = pd.to_datetime(ultima_data).strftime("%d/%m/%Y %H:%M:%S")
         st.success(f"🕒 Ultimo aggiornamento modelli: {ultima_data}")
