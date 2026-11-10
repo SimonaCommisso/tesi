@@ -1,7 +1,4 @@
-
 import streamlit as st
-import textwrap
-import html
 
 def topbar():
 
@@ -16,129 +13,121 @@ def topbar():
         }
 
         .block-container {
-            padding-top: 0 !important;
+            padding-top: 1rem !important;
         }
 
-        /* CONTENITORE NAVBAR */
-        .navbar {
-            width: 100%;
-            background: #0f2454;
+        /* CONTENITORE COMPLETO */
+        .st-key-topbar {
+            background-color: #0f2454;
             border-radius: 10px;
-            overflow: hidden;
-            margin-bottom: 15px;
+            padding: 0 15px 12px 15px;
+            margin-bottom: 20px;
         }
 
         /* TITOLO */
-        .navbar-title {
-            width: 100%;
+        .topbar-title {
             min-height: 85px;
             display: flex;
             align-items: center;
             justify-content: center;
-
             color: white;
             font-size: 32px;
             font-weight: 700;
             text-align: center;
-
-            box-sizing: border-box;
-            padding: 15px;
         }
 
-        /* MENU */
-        .navbar-menu {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-
-            width: 100%;
-            min-height: 65px;
-            box-sizing: border-box;
-
-            padding: 8px 15px;
-            background: #16336f;
-            gap: 8px;
-        }
-
-        /* LINK */
-        .navbar-menu a {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
+        /* LINK DI NAVIGAZIONE */
+        .st-key-topbar [data-testid="stPageLink"] a {
+            background-color: #16336f;
             color: white !important;
+            border-radius: 7px;
+            border: none;
+            padding: 12px 5px;
+            justify-content: center;
             text-decoration: none !important;
-
-            font-size: 15px;
             font-weight: 600;
-
-            padding: 12px 8px;
-            border-radius: 6px;
-            white-space: nowrap;
-
-            transition: background 0.2s;
+            transition: background-color 0.2s;
         }
 
-        .navbar-menu a:hover {
-            background: #294d91;
+        .st-key-topbar [data-testid="stPageLink"] a:hover {
+            background-color: #294d91;
         }
 
-        /* UTENTE */
-        .navbar-menu .user-link {
-            flex: 0 0 45px;
-            margin-left: 10px;
-            border: 1px solid #ffffff55;
+        /* POPOVER UTENTE */
+        .st-key-topbar button[data-testid="stPopoverButton"] {
+            background-color: #16336f;
+            color: white;
+            border: 1px solid #52678e;
+            border-radius: 7px;
+            min-height: 42px;
         }
 
-        @media (max-width: 800px) {
-            .navbar-menu {
-                flex-wrap: wrap;
-            }
-
-            .navbar-menu a {
-                white-space: normal;
-                font-size: 12px;
-            }
+        .st-key-topbar button[data-testid="stPopoverButton"]:hover {
+            background-color: #294d91;
+            color: white;
         }
 
     </style>
     """, unsafe_allow_html=True)
 
-    nome = html.escape(str(st.session_state.nome))
-    cognome = html.escape(str(st.session_state.cognome))
+    # NAVBAR
+    with st.container(key="topbar"):
 
-    navbar_html = f"""
-    <div class="navbar">
-        <div class="navbar-title">
-            🏛️ HR Analytics Dashboard
-        </div>
+        # RIGA 1 - TITOLO
+        st.markdown(
+            '<div class="topbar-title">🏛️ HR Analytics Dashboard</div>',
+            unsafe_allow_html=True
+        )
 
-        <div class="navbar-menu">
+        # RIGA 2 - MENU
+        col1, col2, col3, col4, col5 = st.columns(
+            [2, 2, 2, 2, 0.6],
+            vertical_alignment="center"
+        )
 
-            <a href="/" target="_self">Home</a>
+        with col1:
+            st.page_link(
+                "pages/01_Home.py",
+                label="Home",
+                use_container_width=True
+            )
 
-            <a href="/Forecast_Pensionamenti" target="_self">
-                Pensionamenti
-            </a>
+        with col2:
+            st.page_link(
+                "pages/02_Forecast_Pensionamenti.py",
+                label="Pensionamenti",
+                use_container_width=True
+            )
 
-            <a href="/Strategic_Workforce_Planning" target="_self">
-                Workforce Planning
-            </a>
+        with col3:
+            st.page_link(
+                "pages/03_Strategic_Workforce_Planning.py",
+                label="Workforce Planning",
+                use_container_width=True
+            )
 
-            <a href="/Burnout_Forecast" target="_self">
-                Burnout Forecast
-            </a>
+        with col4:
+            st.page_link(
+                "pages/04_Burnout_Forecast.py",
+                label="Burnout Forecast",
+                use_container_width=True
+            )
 
-            <a href="#" class="user-link" title="{nome} {cognome}">
-                👤
-            </a>
+        with col5:
+            with st.popover("👤", use_container_width=True):
 
-        </div>
-    </div>
-    """
+                st.write(
+                    f"**Utente:** {st.session_state.nome} "
+                    f"{st.session_state.cognome}"
+                )
 
-    # Rimuove l'indentazione che Markdown interpreta come codice
-    navbar_html = textwrap.dedent(navbar_html).strip()
+                if st.session_state.ruolo == "Admin":
+                    st.write("**Ruolo:** Admin")
+                else:
+                    st.write(f"**Ente:** {st.session_state.ruolo}")
 
-    st.markdown(navbar_html, unsafe_allow_html=True)
+                st.divider()
+
+                if st.button("Logout", key="logout_button"):
+                    st.session_state.clear()
+                    st.switch_page("streamlit_app.py")
