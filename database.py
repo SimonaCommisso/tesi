@@ -69,3 +69,12 @@ def load_burnout():
     FROM tesi.pubblica_amministrazione_tesi.result_ml3_predictions_burnout
     """
     return pd.read_sql(query, conn)
+
+# Lettura dell'ultimo aggiornamento dei modelli di Machine Learning
+def load_last_refresh():
+    conn = get_connection()
+    query = """
+    SELECT timestamp_refresh
+    FROM tesi.pubblica_amministrazione_tesi.ml_refresh_log
+    """
+    return pd.read_sql(query, conn)
