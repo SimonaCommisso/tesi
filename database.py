@@ -99,4 +99,8 @@ def load_burnout():
 def load_last_refresh():
     conn = get_connection()
     query = """SELECT timestamp_refresh FROM tesi.pubblica_amministrazione_tesi.ml_refresh_log"""
-    return pd.read_sql(query, conn)
+    df = pd.read_sql(query, conn)
+    conn.close()
+    if len(df) == 0:
+        return None
+    return df.iloc[0]["timestamp_refresh"]

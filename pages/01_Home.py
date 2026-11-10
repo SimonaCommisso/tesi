@@ -46,15 +46,13 @@ with col2:
 
 try:
     ultima_data = load_last_refresh()
-    ultima_data = pd.to_datetime(ultima_data).strftime("%d/%m/%Y %H:%M:%S")
-    
     if ultima_data is not None:
+        ultima_data = pd.to_datetime(ultima_data).strftime("%d/%m/%Y %H:%M:%S")
         st.success(f"🕒 Ultimo aggiornamento modelli: {ultima_data}")
     else:
         st.warning("⚠️ Nessun aggiornamento disponibile")
-
 except Exception as e:
-    st.warning("⚠️ Impossibile recuperare la data di aggiornamento")
+    st.error(f"Errore nel caricamento della data: {e}")
 
 # ============================================================
 # DESCRIZIONE
