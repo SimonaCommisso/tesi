@@ -28,11 +28,6 @@ topbar()
 
 st.title("🏛️ Home")
 
-#===========================================================
-# DATI UTENTE LOGGATO
-#===========================================================
-st.success(f"""Benvenuto {st.session_state.nome} {st.session_state.cognome} - Ente di provenienza: {st.session_state.ruolo}""")
-
 # ============================================================
 # ULTIMO AGGIORNAMENTO
 # ============================================================
