@@ -26,11 +26,12 @@ def topbar():
 
         /* TITOLO */
         .topbar-title {
+            margin-top: 10px;
             min-height: 85px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
+            color: #ffffff !important;
             font-size: 32px;
             font-weight: 700;
             text-align: center;
@@ -39,7 +40,7 @@ def topbar():
         /* LINK DI NAVIGAZIONE */
         .st-key-topbar [data-testid="stPageLink"] a {
             background-color: #16336f;
-            color: white !important;
+            color: #ffffff !important;
             border-radius: 7px;
             border: none;
             padding: 12px 5px;
@@ -56,15 +57,15 @@ def topbar():
         /* POPOVER UTENTE */
         .st-key-topbar button[data-testid="stPopoverButton"] {
             background-color: #16336f;
-            color: white;
+            color: #ffffff !important;
             border: 1px solid #52678e;
             border-radius: 7px;
-            min-height: 42px;
+            min-height: 52px;
         }
 
         .st-key-topbar button[data-testid="stPopoverButton"]:hover {
             background-color: #294d91;
-            color: white;
+            color: #ffffff !important;
         }
 
     </style>
