@@ -22,9 +22,10 @@ def load_users():
 # ============================================================
 # FILTRO RUOLO
 # ============================================================
+
 def apply_role_filter(df):
 
-    ruolo = st.session_state.get("ruolo", "Admin")
+    ruolo = st.session_state.get("ruolo")
 
     # ADMIN: accesso completo
     if ruolo == "Admin":
@@ -32,7 +33,9 @@ def apply_role_filter(df):
 
     ente_id = st.session_state.get("ente_id")
 
-    # Recupero informazioni dell'ente dalla tabella dimensionale
+    if ente_id is None:
+        return df.iloc[0:0]
+
     conn = get_connection()
 
     query = """
@@ -53,21 +56,24 @@ def apply_role_filter(df):
     # VISUALIZZATORE REGIONALE
     if ruolo == "Visualizzatore Regionale":
 
-        if "regione" in df.columns:
-            return df[df["regione"] == regione]
+        if "regione" not in df.columns or pd.isna(regione):
+            return df.iloc[0:0]
 
-        return df.iloc[0:0]
+        return df[df["regione"] == regione]
 
     # VISUALIZZATORE PROVINCIALE
     elif ruolo == "Visualizzatore Provinciale":
 
-        if "provincia" in df.columns:
-            return df[
-                (df["regione"] == regione) &
-                (df["provincia"] == provincia)
-            ]
+        if ("regione" not in df.columns
+            or "provincia" not in df.columns
+            or pd.isna(regione)
+            or pd.isna(provincia)):
+            return df.iloc[0:0]
 
-        return df.iloc[0:0]
+        return df[
+            (df["regione"] == regione) &
+            (df["provincia"] == provincia)
+        ]
 
     # ALTRI RUOLI: filtro per ente
     if "ente_id" in df.columns:

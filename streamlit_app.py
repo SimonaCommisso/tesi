@@ -56,7 +56,6 @@ if not st.session_state.logged:
             st.session_state.cognome = user["cognome"]
             st.session_state.ruolo = user["ruolo"]
             st.session_state.ente_id = user["ente_id"]
-            st.session_state.ente = user["ente"]
 
             st.switch_page("pages/01_Home.py")
 
