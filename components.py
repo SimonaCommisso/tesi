@@ -27,7 +27,7 @@ def topbar():
 
         /* TITOLO */
         .topbar-title {
-            margin-top: 10px;
+            margin-top: 15px;
             min-height: 85px;
             display: flex;
             align-items: center;
@@ -143,7 +143,11 @@ def topbar():
                 if st.session_state.ruolo == "Admin":
                     st.write("**Ruolo:** Admin")
                 else:
-                    st.write(f"**Ente:** {st.session_state.ruolo}")
+                    st.write(f"**Ruolo:** {st.session_state.ruolo}")
+                    st.write(f"**Ente:** {st.session_state.ente}")
+                    st.write(f"**Regione:** {st.session_state.regione}")
+                    if st.session_state.ruolo == "Visualizzatore Provinciale":
+                        st.write(f"**Provincia:** {st.session_state.provincia}")
 
                 st.divider()
 

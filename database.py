@@ -14,9 +14,7 @@ def get_connection():
 def load_users():
     conn = get_connection()
     query = """
-    SELECT *
-    FROM tesi.pubblica_amministrazione_tesi.app_users
-    """
+    SELECT * FROM tesi.pubblica_amministrazione_tesi.app_users """
     return pd.read_sql(query, conn)
 
 
@@ -25,28 +23,85 @@ def load_users():
 # FILTRO RUOLO
 # ============================================================
 def apply_role_filter(df):
+
     ruolo = st.session_state.get("ruolo", "Admin")
+
+    # ADMIN: accesso completo
     if ruolo == "Admin":
         return df
 
     ente_id = st.session_state.get("ente_id")
-    ente_nome = st.session_state.get("ente_nome")
 
-    # filtro su ente_id se presente
+    # Recupero informazioni dell'ente dalla tabella dimensionale
+    conn = get_connection()
+
+    query = """
+        SELECT ente_nome, regione, provincia
+        FROM tesi.pubblica_amministrazione_tesi.dim_ente
+        WHERE ente_id = ?
+    """
+
+    ente = pd.read_sql(query, conn, params=[ente_id])
+
+    if ente.empty:
+        return df.iloc[0:0]
+
+    ente_nome = ente.iloc[0]["ente_nome"]
+    regione = ente.iloc[0]["regione"]
+    provincia = ente.iloc[0]["provincia"]
+
+    # VISUALIZZATORE REGIONALE
+    if ruolo == "Visualizzatore Regionale":
+
+        if "regione" in df.columns:
+            return df[df["regione"] == regione]
+
+        return df.iloc[0:0]
+
+    # VISUALIZZATORE PROVINCIALE
+    elif ruolo == "Visualizzatore Provinciale":
+
+        if "provincia" in df.columns:
+            return df[
+                (df["regione"] == regione) &
+                (df["provincia"] == provincia)
+            ]
+
+        return df.iloc[0:0]
+
+    # ALTRI RUOLI: filtro per ente
     if "ente_id" in df.columns:
         return df[df["ente_id"] == ente_id]
 
-    # filtro su ente se presente
     if "ente" in df.columns:
         return df[df["ente"] == ente_nome]
 
-    return df
+    return df.iloc[0:0]
 
 
 # ============================================================
-# Caricamento dei dati dai modelli di Machine Learning
+# PAGE: 01_Home
 # ============================================================
+# Lettura dell'ultimo aggiornamento dei modelli di Machine Learning
+def load_last_refresh():
+    conn = get_connection()
+    query = """SELECT timestamp_refresh FROM tesi.pubblica_amministrazione_tesi.ml_refresh_log"""
+    df = pd.read_sql(query, conn)
+    conn.close()
+    if len(df) == 0:
+        return None
+    return df.iloc[0]["timestamp_refresh"]
 
+def load_enti_visibili():
+    conn = get_connection()
+    query = """SELECT DISTINCT ente_id, ente FROM tesi.pubblica_amministrazione_tesi.dim_ente"""
+    df = pd.read_sql(query, conn)
+    conn.close()
+    return apply_role_filter(df)
+
+# ============================================================
+# PAGE: 02_Forecast_Pensionamenti
+# ============================================================
 # Caricamento dei dati dal modello di Forecast Pensionamenti
 def load_pensionamenti():
     conn = get_connection()
@@ -55,6 +110,9 @@ def load_pensionamenti():
     conn.close()
     return apply_role_filter(df)
 
+# ============================================================
+# PAGE: 02_Forecast_Pensionamenti
+# ============================================================
 # Caricamento dei dati dal modello per l'analisi dell'impatto dell'Intelligenza Artificiale sulle competenze
 def load_ai_impact():
     conn = get_connection()
@@ -87,6 +145,9 @@ def load_skill_loss():
     conn.close()
     return apply_role_filter(df)
 
+# ============================================================
+# PAGE: 04_Burnout_Forecast
+# ============================================================
 # Caricamento dei dati dal modello per l'analisi del rischio di burnout
 def load_burnout():
     conn = get_connection()
@@ -94,13 +155,3 @@ def load_burnout():
     df = pd.read_sql(query, conn)
     conn.close()
     return apply_role_filter(df)
-
-# Lettura dell'ultimo aggiornamento dei modelli di Machine Learning
-def load_last_refresh():
-    conn = get_connection()
-    query = """SELECT timestamp_refresh FROM tesi.pubblica_amministrazione_tesi.ml_refresh_log"""
-    df = pd.read_sql(query, conn)
-    conn.close()
-    if len(df) == 0:
-        return None
-    return df.iloc[0]["timestamp_refresh"]

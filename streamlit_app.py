@@ -46,7 +46,7 @@ if not st.session_state.logged:
         user = users[
             (users["username"] == username)
             &
-            (users["password_hash"] == password_hash)
+            (users["password"] == password_hash)
         ]
 
         if len(user) == 1:
@@ -56,6 +56,7 @@ if not st.session_state.logged:
             st.session_state.cognome = user["cognome"]
             st.session_state.ruolo = user["ruolo"]
             st.session_state.ente_id = user["ente_id"]
+            st.session_state.ente = user["ente"]
 
             st.switch_page("pages/01_Home.py")
 
