@@ -3,6 +3,7 @@ import streamlit as st
 def topbar():
 
     st.markdown("""
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <style>
         section[data-testid="stSidebar"] {
             display: none;
@@ -132,7 +133,7 @@ def topbar():
             )
 
         with col5:
-            with st.popover("👤", use_container_width=True):
+            with st.popover(" ", use_container_width=True, icon=":material/account_circle:"):
 
                 st.write(
                     f"**Utente:** {st.session_state.nome} "
