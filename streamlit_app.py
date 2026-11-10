@@ -1,6 +1,12 @@
 import streamlit as st
 import hashlib
+
 from database import load_users
+
+st.set_page_config(
+    page_title="HR Analytics Dashboard",
+    layout="wide"
+)
 
 # ============================================================
 # LOGIN
@@ -9,22 +15,26 @@ from database import load_users
 if "logged" not in st.session_state:
     st.session_state.logged = False
 
+# ============================================================
+# PAGINA LOGIN
+# ============================================================
+
 if not st.session_state.logged:
-    # Nascondo il menu laterale durante il login
     st.markdown("""
     <style>
-        section[data-testid="stSidebar"] {
-            display: none;
-        }
 
-        button[kind="header"] {
-            display: none;
-        }
+    section[data-testid="stSidebar"] {
+        display:none;
+    }
+
+    button[kind="header"] {
+        display:none;
+    }
+
     </style>
     """, unsafe_allow_html=True)
-    
-    st.title("🔐 Login")
 
+    st.title("🔐 Login")
     username = st.text_input("Username")
 
     password = st.text_input("Password", type="password")
@@ -32,7 +42,7 @@ if not st.session_state.logged:
     if st.button("Accedi"):
         users = load_users()
         password_hash = hashlib.sha256(password.encode()).hexdigest()
-        
+
         user = users[
             (users["username"] == username)
             &
@@ -46,9 +56,16 @@ if not st.session_state.logged:
             st.session_state.cognome = user["cognome"]
             st.session_state.ruolo = user["ruolo"]
             st.session_state.ente_id = user["ente_id"]
+
             st.switch_page("pages/01_Home.py")
 
         else:
             st.error("Credenziali non valide")
 
     st.stop()
+
+# ============================================================
+# UTENTE GIÀ LOGGATO
+# ============================================================
+
+st.switch_page("pages/01_Home.py")
