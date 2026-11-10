@@ -59,36 +59,43 @@ if not st.session_state.logged:
             st.session_state.ruolo = user["ruolo"]
             st.session_state.ente_id = user["ente_id"]
 
-            # Regione e provincia dalla tabella app_user
-            st.session_state.regione = user["regione"]
-            st.session_state.provincia = user["provincia"]
+            # Inizializzazione delle informazioni territoriali
+            st.session_state.regione = None
+            st.session_state.provincia = None
+            st.session_state.ente = None
 
-            # Recupero nome ente da dim_ente
-            if user["ente_id"] is not None:
-
-                conn = get_connection()
-
-                query = """
-                    SELECT nome AS ente_nome
-                    FROM tesi.pubblica_amministrazione_tesi.dim_ente
-                    WHERE ente_id = ?
-                """
-
-                ente = pd.read_sql(
-                    query,
-                    conn,
-                    params=[user["ente_id"]]
-                )
-
-                if ente.empty:
-                    st.session_state.clear()
-                    st.error("Ente associato all'utente non trovato.")
-                    st.stop()
-
-                st.session_state.ente = ente.iloc[0]["ente_nome"]
+            # ADMIN
+            if user["ruolo"] == "Admin":
+                pass
 
             else:
-                st.session_state.ente = None
+                # Regione e provincia da app_user
+                st.session_state.regione = user["regione"]
+                st.session_state.provincia = user["provincia"]
+
+                # Recupero nome ente da dim_ente
+                if pd.notna(user["ente_id"]):
+
+                    conn = get_connection()
+
+                    query = """
+                        SELECT nome AS ente_nome
+                        FROM tesi.pubblica_amministrazione_tesi.dim_ente
+                        WHERE ente_id = ?
+                    """
+
+                    ente = pd.read_sql(
+                        query,
+                        conn,
+                        params=[user["ente_id"]]
+                    )
+
+                    if ente.empty:
+                        st.session_state.clear()
+                        st.error("Ente associato all'utente non trovato.")
+                        st.stop()
+
+                    st.session_state.ente = ente.iloc[0]["ente_nome"]
 
             st.switch_page("pages/01_Home.py")
 
