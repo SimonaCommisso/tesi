@@ -26,6 +26,18 @@ def topbar():
             font-weight:700;
             border-radius:10px 10px 0 0;
         }
+        
+        div[data-testid="stButton"] button {
+            background-color:#0f2454;
+            color:white;
+            border:none;
+            border-radius:0;
+        }
+
+        div[data-testid="stButton"] button:hover {
+            background-color:#18336f;
+            color:white;
+        }
 
     </style>
     """, unsafe_allow_html=True)
