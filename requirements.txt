@@ -1,5 +1,5 @@
 streamlit
 pandas
 requests
-plotly>=5.24.0
+plotly>=7.1.0
 databricks-sql-connector
