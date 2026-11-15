@@ -6,7 +6,7 @@ from components import topbar
 from database import load_last_refresh, load_pensionamenti
 from streamlit_folium import st_folium
 import folium
-from utility.coordinate import get_coordinate_regione
+from utility.coordinate import get_coordinate_regione, get_coordinate_provincia
 
 
 # ============================================================
@@ -93,7 +93,7 @@ with col_mappa:
 
             st.success(f"📍 Provincia: {provincia}")
 
-            lat, lon = get_coordinate_regione(provincia)
+            lat, lon = get_coordinate_provincia(provincia)
 
             m = folium.Map(
                 location=[lat, lon],
