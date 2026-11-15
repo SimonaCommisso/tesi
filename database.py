@@ -122,7 +122,7 @@ def load_pensionamenti_nazionali():
 def load_pensionamenti_regione(regione, ente):
     conn = get_connection()
     try:
-        query = """SELECT * FROM tesi.pubblica_amministrazione_tesi.result_ml1_forecast_pensionamenti_regionale WHERE regione = ? AND ente=?"""
+        query = """SELECT * FROM tesi.pubblica_amministrazione_tesi.result_ml1_forecast_pensionamenti_regionale WHERE regione=? AND ente_id=?"""
         return pd.read_sql(query, conn, params=(regione,ente))
     finally:
         conn.close()
@@ -131,7 +131,7 @@ def load_pensionamenti_regione(regione, ente):
 def load_pensionamenti_provincia(regione, provincia, ente):
     conn = get_connection()
     try: 
-        query = """SELECT * FROM tesi.pubblica_amministrazione_tesi.result_ml1_forecast_pensionamenti_provincia WHERE regione = ? AND provincia = ? AND ente=?"""
+        query = """SELECT * FROM tesi.pubblica_amministrazione_tesi.result_ml1_forecast_pensionamenti_provincia WHERE regione=? AND provincia=? AND ente_id=?"""
         return pd.read_sql(query, conn, params=(regione, provincia, ente))
     finally:
             conn.close()
