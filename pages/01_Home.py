@@ -74,7 +74,7 @@ with col_mappa:
     # ADMIN
     if regione is None:
         st.info("🌍 Visualizzazione Nazionale")
-        m = folium.Map(location=[42.5, 12.5], zoom_start=5, tiles="CartoDB positron")
+        m = folium.Map(location=[42.5, 12.5], zoom_start=5, tiles="OpenStreetMap")
 
     # UTENTE REGIONALE
     elif provincia is None:
