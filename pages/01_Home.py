@@ -6,7 +6,7 @@ from components import topbar
 from database import load_last_refresh, load_pensionamenti
 from streamlit_folium import st_folium
 import folium
-from utils import coordinate_regioni, coordinate_province
+from utility.coordinate import get_coordinate_regione
 
 
 # ============================================================
@@ -76,7 +76,7 @@ with col_mappa:
         elif provincia is None:
 
             st.success(f"📍 Regione: {regione}")
-            lat, lon = coordinate_regioni.get(regione, [42.5, 12.5])
+            lat, lon = get_coordinate_regione(regione)
 
             m = folium.Map(
                 location=[lat, lon],
@@ -93,7 +93,7 @@ with col_mappa:
 
             st.success(f"📍 Provincia: {provincia}")
 
-            lat, lon = coordinate_province.get(provincia, [42.5, 12.5])
+            lat, lon = get_coordinate_regione(provincia)
 
             m = folium.Map(
                 location=[lat, lon],

@@ -1,4 +1,5 @@
-coordinate_regioni = {
+def get_coordinate_regione(regione):
+    coordinate_regioni = {
             "Abruzzo": [42.3500, 13.4000],
             "Basilicata": [40.5000, 16.0833],
             "Calabria": [38.9100, 16.5900],
@@ -22,8 +23,12 @@ coordinate_regioni = {
             "Veneto": [45.4408, 12.3155]
         }
 
-coordinate_province = {
-             "Chieti": [42.3512, 14.1675],
+    return coordinate_regioni[regione]
+
+def get_coordinate_provincia(provincia):
+
+    coordinate_province = {
+            "Chieti": [42.3512, 14.1675],
             "L'Aquila": [42.3500, 13.3995],
             "Pescara": [42.4618, 14.2161],
             "Teramo": [42.6589, 13.7044],
@@ -149,3 +154,4 @@ coordinate_province = {
             "Verona": [45.4384, 10.9916],
             "Vicenza": [45.5455, 11.5354]
         }
+    return coordinate_province[provincia]
