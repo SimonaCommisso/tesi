@@ -8,6 +8,7 @@ from database import (
 )
 from components import topbar, tasto_torna_home
 from style import load_css_tasto_home
+from utility.costanti import Ruolo
 
 #===========================================================
 # CONTROLLO LOGIN
@@ -31,20 +32,20 @@ load_css_tasto_home()
 st.title("📈 Forecast Pensionamenti")
 
 # Carico i dati dai modelli di Machine Learning
-if ruolo == "Admin":
+if ruolo == Ruolo.ADMIN:
     df = load_pensionamenti_nazionali()
     df_annuale = load_pensionamenti_annuali()
 
-elif ruolo == "Visualizzatore Regionale":
+elif ruolo == Ruolo.VISUALIZZATORE_REGIONALE:
     df = load_pensionamenti_regione(regione, ente_nome)
     df = df[(df["regione"] == regione) & (df["ente_nome"] == ente_nome)]
 
-elif ruolo == "Visualizzatore Provinciale":
+elif ruolo == Ruolo.VISUALIZZATORE_PROVINCIALE:
     df = load_pensionamenti_provincia(regione, provincia, ente_nome)
     df = df[(df["regione"] == regione) & (df["provincia"] == provincia) & (df["ente_nome"] == ente_nome)]
     
 
-if ruolo == "Admin":
+if ruolo == Ruolo.ADMIN:
     # 1. Pensionamento medio per Ente (con colore personalizzato e alias)
     st.subheader("Pensionamento medio per Ente")
     fig = px.bar(
@@ -103,7 +104,7 @@ if ruolo == "Admin":
     st.plotly_chart(fig, use_container_width=True)
         
        
-elif ruolo == "Visualizzatore Regionale":
+elif ruolo == Ruolo.VISUALIZZATORE_REGIONALE:
     st.subheader(f"Pensionamenti per Provincia - {regione}")
     fig = px.bar(
         df.groupby("provincia", as_index=False)
@@ -130,7 +131,7 @@ elif ruolo == "Visualizzatore Regionale":
     )
     st.plotly_chart(fig, use_container_width=True)
     
-elif ruolo == "Visualizzatore Provinciale":
+elif ruolo == Ruolo.VISUALIZZATORE_PROVINCIALE:
     col1, col2 = st.columns(2)
     with col1:
         st.metric("Pensionamenti Previsti", int(df["numero_pensionamenti"].sum()))

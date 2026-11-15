@@ -129,11 +129,11 @@ with col_kpi:
 
         elif provincia is None:
             df = load_pensionamenti_regione(regione, ente)
-            df_view = df[(df["regione"] == regione) & (df["ente_nome"] == ente)]
+            df_view = df[(df["regione"] == regione) & (df["ente"] == ente)]
 
         else:
             df = load_pensionamenti_provincia(regione, provincia, ente)
-            df_view = df[(df["regione"] == regione) & (df["provincia"] == provincia) & (df["ente_nome"] == ente)]
+            df_view = df[(df["regione"] == regione) & (df["provincia"] == provincia) & (df["ente"] == ente)]
 
         totale = int(df_view["numero_dipendenti"].sum())
 
