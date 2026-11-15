@@ -146,13 +146,14 @@ with col_kpi:
         else:
             rischio = 0
 
-        st.metric("Pensionamenti Previsti", f"{totale:,}")
-        st.metric( "Probabilità Media Pensionamento", f"{rischio}%")
+        st.metric("####Pensionamenti Previsti", f"{totale:,}")
+        st.metric("####Probabilità Media Pensionamento", f"{rischio}%")
         
         # ============================================================
         # Grafico Pensionamenti per Qualifica
         # ============================================================
-        st.markdown("##### 👥 Pensionamenti per Qualifica")
+        st.markdown('<div class="dashboard-title">👥 Pensionamenti per Qualifica</div>',
+                    unsafe_allow_html=True)
         
         if len(df_view) > 0:
             # Aggreghiamo i dati raggruppando per qualifica e sommando i pensionamenti
