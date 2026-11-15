@@ -5,32 +5,6 @@ def load_css():
     st.markdown("""
     <style>
     
-    /* Stilizza il componente st.page_link facendolo sembrare un pulsante */
-    [data-testid="stPageLink"] {
-        background-color: #f0f2f6;
-        border: 1px solid #d6d9dc;
-        border-radius: 8px;
-        padding: 4px 12px;
-        width: fit-content;
-        transition: all 0.3s ease;
-        margin-top: 10px;
-        margin-bottom: 10px;
-    }
-    
-    /* Effetto hover al passaggio del mouse */
-    [data-testid="stPageLink"]:hover {
-        background-color: #e2e8f0;
-        border-color: #b0c4de;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-    }
-
-    /* Colore e stile del testo/icona all'interno del link */
-    [data-testid="stPageLink"] a {
-        color: #31333F !important;
-        font-weight: 500;
-        text-decoration: none !important;
-    }
-    
     .dashboard-card {
         background-color: white;
         padding: 20px;
@@ -57,3 +31,37 @@ def load_css():
 
     </style>
     """, unsafe_allow_html=True)
+    
+    
+    
+def load_css_tasto_home():
+    
+    st.markdown("""
+    <style>
+    /* Stilizza il componente st.page_link facendolo sembrare un pulsante */
+        [data-testid="stPageLink"] {
+            background-color: #f0f2f6;
+            border: 1px solid #d6d9dc;
+            border-radius: 8px;
+            padding: 4px 12px;
+            width: fit-content;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+        
+        /* Effetto hover al passaggio del mouse */
+        [data-testid="stPageLink"]:hover {
+            background-color: #e2e8f0;
+            border-color: #b0c4de;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+    
+        /* Colore e stile del testo/icona all'interno del link */
+        [data-testid="stPageLink"] a {
+            color: #31333F !important;
+            font-weight: 500;
+            text-decoration: none !important;
+        }
+    </style>
+        """, unsafe_allow_html=True)

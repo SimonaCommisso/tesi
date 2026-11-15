@@ -3,7 +3,7 @@ import requests
 import pandas as pd
 from style import load_css
 from components import topbar
-from database import load_last_refresh, load_pensionamenti_nazionali
+from database import load_last_refresh, load_pensionamenti_nazionali, load_pensionamenti_regione, load_pensionamenti_provincia
 from streamlit_folium import st_folium
 import folium
 from utility.coordinate import get_coordinate_regione, get_coordinate_provincia
@@ -119,20 +119,21 @@ with col_kpi:
         st.markdown(
             '<div class="dashboard-title">📈 Forecast Pensionamenti</div>',
             unsafe_allow_html=True)
-
-        df = load_pensionamenti_nazionali()
-
         regione = st.session_state.get("regione")
         provincia = st.session_state.get("provincia")
+        ente = st.session_state.get("ente_id")
 
         if regione is None and provincia is None:
+            df = load_pensionamenti_nazionali()
             df_view = df
 
         elif provincia is None:
-            df_view = df[df["regione"] == regione]
+            df = load_pensionamenti_regione(regione, ente)
+            df_view = df[(df["regione"] == regione) & (df["ente_id"] == ente)]
 
         else:
-            df_view = df[df["provincia"] == provincia]
+            df = load_pensionamenti_provincia(regione, provincia, ente)
+            df_view = df[(df["regione"] == regione) & (df["provincia"] == provincia) & (df["ente_id"] == ente)]
 
         totale = int(df_view["numero_dipendenti"].sum())
 

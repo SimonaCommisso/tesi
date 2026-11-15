@@ -7,7 +7,7 @@ from database import (
     load_pensionamenti_annuali
 )
 from components import topbar
-from style import load_css
+from style import load_css_tasto_home
 
 #===========================================================
 # CONTROLLO LOGIN
@@ -26,7 +26,7 @@ ente = st.session_state.get("ente_id")
 
 # Caricamento topbar
 topbar()
-load_css()
+load_css_tasto_home()
 
 st.title("📈 Forecast Pensionamenti")
 
@@ -36,11 +36,11 @@ if ruolo == "Admin":
     df_annuale = load_pensionamenti_annuali()
 
 elif ruolo == "Visualizzatore Regionale":
-    df = load_pensionamenti_regione(regione)
+    df = load_pensionamenti_regione(regione, ente)
     df = df[(df["regione"] == regione) & (df["ente_id"] == ente)]
 
 elif ruolo == "Visualizzatore Provinciale":
-    df = load_pensionamenti_provincia(regione, provincia)
+    df = load_pensionamenti_provincia(regione, provincia, ente)
     df = df[(df["regione"] == regione) & (df["provincia"] == provincia) & (df["ente_id"] == ente)]
     
 
