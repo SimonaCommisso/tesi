@@ -2,6 +2,8 @@ import streamlit as st
 import plotly.express as px
 from components import topbar
 from database import load_ai_impact, load_future_skills, load_skill_critiche, load_skill_loss
+from style import load_css
+
 
 # ============================================================
 # CONTROLLO LOGIN
@@ -16,6 +18,7 @@ st.set_page_config(page_title="Forecast Workforce Planning",layout="wide")
 
 # Caricamento topbar
 topbar()
+load_css()
 
 st.title("🧠 Strategic Workforce Planning")
 
