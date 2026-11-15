@@ -161,3 +161,39 @@ def topbar():
                 if st.button("Logout", key="logout_button"):
                     st.session_state.clear()
                     st.switch_page("streamlit_app.py")
+                    
+                    
+def tasto_torna_home():
+    st.markdown("""
+    <style>
+        /* Stilizza il componente st.page_link facendolo sembrare un pulsante */
+        .custom-page-link [data-testid="stPageLink"] {
+            background-color: #f0f2f6;
+            border: 1px solid #d6d9dc;
+            border-radius: 8px;
+            padding: 4px 12px;
+            width: fit-content;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+        
+        /* Effetto hover al passaggio del mouse */
+        .custom-page-link [data-testid="stPageLink"]:hover {
+            background-color: #e2e8f0;
+            border-color: #b0c4de;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+    
+        /* Colore e stile del testo/icona all'interno del link */
+        .custom-page-link [data-testid="stPageLink"] a {
+            color: #31333F !important;
+            font-weight: 500;
+            text-decoration: none !important;
+        }
+    </style>
+    """, unsafe_allow_html=True)
+    
+    st.markdown('<div class="custom-page-link">', unsafe_allow_html=True)
+    st.page_link("pages/01_Home.py", label="Torna alla Home", icon="🏠")
+    st.markdown('</div>', unsafe_allow_html=True)

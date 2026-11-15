@@ -2,7 +2,7 @@ import streamlit as st
 import plotly.express as px
 import pandas as pd
 from database import load_burnout
-from components import topbar
+from components import topbar, tasto_torna_home
 from style import load_css_tasto_home
 
 # ============================================================
@@ -96,6 +96,4 @@ fig = px.scatter(
 st.plotly_chart(fig, use_container_width=True)
 st.divider()
 
-st.markdown('<div class="custom-page-link">', unsafe_allow_html=True)
-st.page_link("pages/01_Home.py", label="Torna alla Home", icon="🏠")
-st.markdown('</div>', unsafe_allow_html=True)
+tasto_torna_home()

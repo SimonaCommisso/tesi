@@ -62,7 +62,7 @@ if not st.session_state.logged:
             # Inizializzazione delle informazioni territoriali
             st.session_state.regione = None
             st.session_state.provincia = None
-            st.session_state.ente = None
+            st.session_state.ente_nome = None
 
             # ADMIN
             if user["ruolo"] == "Admin":
@@ -84,18 +84,18 @@ if not st.session_state.logged:
                         WHERE ente_id = ?
                     """
 
-                    ente = pd.read_sql(
+                    ente_nome = pd.read_sql(
                         query,
                         conn,
                         params=[user["ente_id"]]
                     )
 
-                    if ente.empty:
+                    if ente_nome.empty:
                         st.session_state.clear()
                         st.error("Ente associato all'utente non trovato.")
                         st.stop()
 
-                    st.session_state.ente = ente.iloc[0]["ente_nome"]
+                    st.session_state.ente_nome = ente_nome.iloc[0]["ente_nome"]
 
             st.switch_page("pages/01_Home.py")
 

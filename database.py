@@ -128,7 +128,7 @@ def load_pensionamenti_regione(regione, ente):
         conn.close()
 
 # Caricamento dei dati livello Provincia
-def load_pensionamenti_provincia(regione,provincia, ente):
+def load_pensionamenti_provincia(regione, provincia, ente):
     conn = get_connection()
     try: 
         query = """SELECT * FROM tesi.pubblica_amministrazione_tesi.result_ml1_forecast_pensionamenti_provincia WHERE regione=? AND provincia=? AND ente=?"""

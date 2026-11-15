@@ -121,19 +121,19 @@ with col_kpi:
             unsafe_allow_html=True)
         regione = st.session_state.get("regione")
         provincia = st.session_state.get("provincia")
-        ente_nome = st.session_state.get("ente_nome")
+        ente = st.session_state.get("ente_nome")
 
         if regione is None and provincia is None:
             df = load_pensionamenti_nazionali()
             df_view = df
 
         elif provincia is None:
-            df = load_pensionamenti_regione(regione, ente_nome)
-            df_view = df[(df["regione"] == regione) & (df["ente_nome"] == ente_nome)]
+            df = load_pensionamenti_regione(regione, ente)
+            df_view = df[(df["regione"] == regione) & (df["ente_nome"] == ente)]
 
         else:
-            df = load_pensionamenti_provincia(regione, provincia, ente_nome)
-            df_view = df[(df["regione"] == regione) & (df["provincia"] == provincia) & (df["ente_nome"] == ente_nome)]
+            df = load_pensionamenti_provincia(regione, provincia, ente)
+            df_view = df[(df["regione"] == regione) & (df["provincia"] == provincia) & (df["ente_nome"] == ente)]
 
         totale = int(df_view["numero_dipendenti"].sum())
 

@@ -6,7 +6,7 @@ from database import (
     load_pensionamenti_provincia, 
     load_pensionamenti_annuali
 )
-from components import topbar
+from components import topbar, tasto_torna_home
 from style import load_css_tasto_home
 
 #===========================================================
@@ -22,7 +22,7 @@ st.set_page_config(page_title="Forecast Pensionamenti", layout="wide")
 ruolo = st.session_state.get("ruolo")
 regione = st.session_state.get("regione")
 provincia = st.session_state.get("provincia")
-ente = st.session_state.get("ente_id")
+ente_nome = st.session_state.get("ente_nome")
 
 # Caricamento topbar
 topbar()
@@ -36,26 +36,26 @@ if ruolo == "Admin":
     df_annuale = load_pensionamenti_annuali()
 
 elif ruolo == "Visualizzatore Regionale":
-    df = load_pensionamenti_regione(regione, ente)
-    df = df[(df["regione"] == regione) & (df["ente_id"] == ente)]
+    df = load_pensionamenti_regione(regione, ente_nome)
+    df = df[(df["regione"] == regione) & (df["ente_nome"] == ente_nome)]
 
 elif ruolo == "Visualizzatore Provinciale":
-    df = load_pensionamenti_provincia(regione, provincia, ente)
-    df = df[(df["regione"] == regione) & (df["provincia"] == provincia) & (df["ente_id"] == ente)]
+    df = load_pensionamenti_provincia(regione, provincia, ente_nome)
+    df = df[(df["regione"] == regione) & (df["provincia"] == provincia) & (df["ente_nome"] == ente_nome)]
     
 
 if ruolo == "Admin":
     # 1. Pensionamento medio per Ente (con colore personalizzato e alias)
     st.subheader("Pensionamento medio per Ente")
     fig = px.bar(
-        df.groupby("ente", as_index=False)
+        df.groupby("ente_nome", as_index=False)
         .agg({"probabilita_media":"mean"})
         .sort_values("probabilita_media", ascending=False),
-        x="ente",
+        x="ente_nome",
         y="probabilita_media",
         color="probabilita_media",
         color_continuous_scale="Blues",
-        labels={"ente": "Ente", "probabilita_media": "Probabilità Media"}
+        labels={"ente_nome": "Ente", "probabilita_media": "Probabilità Media"}
     )
     st.plotly_chart(fig, use_container_width=True)
     st.divider()
@@ -63,15 +63,15 @@ if ruolo == "Admin":
     # 2. Top 5 Enti a rischio (Barre orizzontali, orientate con scala di rosso)
     st.subheader("Top 5 Enti a rischio")
     fig = px.bar(
-        df.groupby("ente", as_index=False)
+        df.groupby("ente_nome", as_index=False)
         .agg({"probabilita_media":"mean"})
         .sort_values("probabilita_media", ascending=True).tail(5), # .tail(5) con ascending=True mette i più alti in alto
         x="probabilita_media",
-        y="ente",
+        y="ente_nome",
         orientation="h",
         color="probabilita_media",
         color_continuous_scale="Reds",
-        labels={"ente": "Ente", "probabilita_media": "Probabilità Media"}
+        labels={"ente_nome": "Ente", "probabilita_media": "Probabilità Media"}
     )
     st.plotly_chart(fig, use_container_width=True)
     st.divider()
@@ -151,6 +151,4 @@ elif ruolo == "Visualizzatore Provinciale":
     
 st.divider()
 
-st.markdown('<div class="custom-page-link">', unsafe_allow_html=True)
-st.page_link("pages/01_Home.py", label="Torna alla Home", icon="🏠")
-st.markdown('</div>', unsafe_allow_html=True)
+tasto_torna_home()
