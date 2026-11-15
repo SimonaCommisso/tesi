@@ -2,7 +2,7 @@ import streamlit as st
 import requests
 import pandas as pd
 from components import topbar
-from database import load_last_refresh
+from database import load_last_refresh, load_pensionamenti
 
 # ============================================================
 # CONFIGURAZIONE
@@ -43,38 +43,58 @@ except Exception as e:
     st.error(f"Errore nel caricamento della data: {e}")
 
 # ============================================================
-# DESCRIZIONE
+# DASHBOARD OVERVIEW
 # ============================================================
 
-st.markdown("""
-### 🎯 Obiettivo della Dashboard
+st.markdown("""### Home""")
 
-Questa piattaforma di **HR Analytics per la Pubblica Amministrazione**
-supporta i processi decisionali relativi alla gestione strategica del
-capitale umano attraverso tecniche di Business Intelligence,
-Machine Learning e Workforce Analytics.
+col_mappa, col_kpi = st.columns([2,1])
+st.session_state.regione
+st.session_state.provincia
+df_pensionamenti = load_pensionamenti()
 
-### 📊 Aree di Analisi
+with col_mappa:
 
-#### 📈 Forecast Pensionamenti
-Previsione delle uscite future del personale e supporto alla
-pianificazione del turnover.
+    st.subheader("🗺️ Ambito Territoriale")
 
-#### 🧠 Strategic Workforce Planning
-Analisi delle competenze, individuazione degli skill gap,
-valutazione del rischio di perdita delle competenze e impatto
-dell'Intelligenza Artificiale sui profili professionali.
+    regione = st.session_state.get("regione")
+    provincia = st.session_state.get("provincia")
 
-#### 🔥 Burnout Risk Forecast
-Valutazione del benessere organizzativo e identificazione dei
-dipendenti e delle strutture maggiormente esposte al rischio
-burnout.
+    if regione is None:
 
----
+        st.info("🌍 Visualizzazione Nazionale")
 
-Utilizzare il pulsante **Aggiorna i Dati** per avviare
-l'esecuzione dei modelli analitici su Databricks.
-""")
+        st.image("https://upload.wikimedia.org/wikipedia/commons/0/03/Italy_regions_map.png",
+            use_container_width=True)
+
+    elif provincia is None:
+        st.success(f"📍 Regione: {regione}")
+        st.write("Visualizzazione limitata alla regione assegnata.")
+
+    else:
+        st.success(f"📍 Provincia: {provincia}")
+        st.write(f"Visualizzazione limitata alla provincia di {provincia}.")
+
+with col_kpi:
+    st.subheader("📈 Forecast Pensionamenti")
+    df = load_pensionamenti()
+    
+    if (st.session_state.get("regione") is None and
+        st.session_state.get("provincia") is None):
+        totale = df["numero_dipendenti"].sum()
+        
+    elif (st.session_state.get("regione") is not None and
+        st.session_state.get("provincia") is None):
+        totale = (df[df["regione"] == st.session_state["regione"]]
+            ["numero_dipendenti"].sum())
+    else:
+        totale = (df[df["provincia"] == st.session_state["provincia"]]
+            ["numero_dipendenti"].sum())
+    
+    st.metric(label="Pensionamenti Previsti", value=f"{int(totale):,}")
+    rischio = round(df["probabilita_media_pensionamento"].mean(), 2)
+    st.metric("Probabilità Media Pensionamento", f"{rischio}%")
+    
 
 # ============================================================
 # AGGIORNA MODELLI
