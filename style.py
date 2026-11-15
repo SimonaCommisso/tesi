@@ -4,13 +4,6 @@ def load_css():
 
     st.markdown("""
     <style>
-
-    .topbar {
-        background-color:#0e1117;
-        padding:12px;
-        border-radius:10px;
-        margin-bottom:20px;
-    }
     
     .dashboard-card {
         background-color: white;
@@ -26,6 +19,14 @@ def load_css():
         font-size: 22px;
         font-weight: 700;
         margin-bottom: 10px;
+    }
+    
+    [data-testid="column"] {
+        background-color: white;
+        border-radius: 20px;
+        padding: 20px;
+        border: 1px solid #dce1ea;
+        box-shadow: 0px 4px 12px rgba(15,36,84,0.08);
     }
 
     </style>
