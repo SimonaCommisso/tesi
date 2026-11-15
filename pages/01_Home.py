@@ -70,7 +70,7 @@ with col_mappa:
             m = folium.Map(
                 location=[42.5, 12.5],
                 zoom_start=5,
-                tiles="CartoDB positron"
+                tiles="OpenStreetMap"
             )
 
         elif provincia is None:
@@ -81,7 +81,7 @@ with col_mappa:
             m = folium.Map(
                 location=[lat, lon],
                 zoom_start=8,
-                tiles="CartoDB positron"
+                tiles="OpenStreetMap"
             )
 
             folium.Marker(
@@ -98,7 +98,7 @@ with col_mappa:
             m = folium.Map(
                 location=[lat, lon],
                 zoom_start=10,
-                tiles="CartoDB positron"
+                tiles="OpenStreetMap"
             )
 
             folium.CircleMarker(
