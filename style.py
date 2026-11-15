@@ -8,6 +8,7 @@ def load_css():
     .dashboard-card {
         background-color: white;
         padding: 20px;
+        height: 605px;
         border-radius: 20px;
         border: 1px solid #d9d9d9;
         box-shadow: 0 2px 8px rgba(0,0,0,0.08);
