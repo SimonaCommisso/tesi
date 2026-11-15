@@ -30,11 +30,11 @@ if ruolo == "Admin":
 
 elif ruolo == "Visualizzatore Regionale":
     df = load_pensionamenti_regione(regione, ente)
-    df = df[(df["regione"] == regione) & (df["ente_id" == ente])]
+    df = df[(df["regione"] == regione) & (df["ente_id"] == ente)]
 
 elif ruolo == "Visualizzatore Provinciale":
     df = load_pensionamenti_provincia(regione, provincia, ente)
-    df = df[(df["regione"] == regione) & (df["provincia"] == provincia) & (df["ente_id" == ente])]
+    df = df[(df["regione"] == regione) & (df["provincia"] == provincia) & (df["ente_id"] == ente)]
     
 
 if ruolo == "Admin":
