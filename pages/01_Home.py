@@ -1,7 +1,7 @@
 import streamlit as st
 import requests
 import pandas as pd
-import style
+from style import load_css
 from components import topbar
 from database import load_last_refresh, load_pensionamenti
 from streamlit_folium import st_folium
@@ -14,6 +14,8 @@ import folium
 
 if not st.session_state.get("logged",False):
     st.switch_page("streamlit_app.py")
+    
+load_css()
 
 # ===========================================================
 ## DATI DI CONNESSIONE A DATABRICKS
