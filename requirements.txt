@@ -3,3 +3,5 @@ pandas
 requests
 plotly>=5.24.0
 databricks-sql-connector
+streamlit-folium
+folium
