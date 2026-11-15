@@ -1,6 +1,7 @@
 import streamlit as st
 import requests
 import pandas as pd
+import plotly.express as px
 from style import load_css
 from components import topbar
 from database import load_last_refresh, load_pensionamenti_nazionali, load_pensionamenti_regione, load_pensionamenti_provincia
