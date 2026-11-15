@@ -25,6 +25,7 @@ def load_css():
     [data-testid="column"] {
         background-color: white;
         border-radius: 20px;
+        height: 605px;
         padding: 20px;
         border: 1px solid #dce1ea;
         box-shadow: 0px 4px 12px rgba(15,36,84,0.08);
