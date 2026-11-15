@@ -38,16 +38,15 @@ elif ruolo == "Visualizzatore Provinciale":
     
 
 if ruolo == "Admin":
-    st.subheader("Pensionamento medio per Regione")
+    st.subheader("Pensionamento medio per Ente")
 
-    fig = px.bar(df.groupby("regione", as_index=False)
+    fig = px.bar(df.groupby("ente", as_index=False)
         .agg({"probabilita_media_pensionamento":"mean"})
         .sort_values("probabilita_media_pensionamento", ascending=False),
-        x="regione",
+        x="ente",
         y="probabilita_media_pensionamento")
 
     st.plotly_chart(fig, use_container_width=True)
-    
     st.divider()
 
     st.subheader("Top 10 Enti a rischio")
@@ -55,14 +54,26 @@ if ruolo == "Admin":
         .agg({"probabilita_media_pensionamento":"mean"})
         .sort_values("probabilita_media_pensionamento", ascending=False).head(10),
         x="ente",
-        y="probabilita_media_pensionamento"
-    )
+        y="probabilita_media_pensionamento")
+    st.plotly_chart(fig, use_container_width=True)
+
+    st.divider()
+
+    st.subheader("Pensionamento medio per Qualifica")
+    fig = px.bar(df.groupby("qualifica", as_index=False)
+        .agg({"probabilita_media_pensionamento":"mean"})
+        .sort_values("probabilita_media_pensionamento", ascending=False),
+        x="qualifica",
+        y="probabilita_media_pensionamento")
     st.plotly_chart(fig, use_container_width=True)
     
+    st.divider()
+    
+    st.subheader("Pensionamienti previsti per anno")
     fig = px.line(df_annuale, x="anno", y="numero_pensionamenti_previsti", markers=True)
     st.plotly_chart(fig, use_container_width=True)
         
-
+       
 elif ruolo == "Visualizzatore Regionale":
     st.subheader(f"Pensionamenti per Provincia - {regione}")
     fig = px.bar(df.groupby("provincia", as_index=False)
