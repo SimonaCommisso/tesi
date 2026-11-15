@@ -98,21 +98,15 @@ with col_mappa:
             m = folium.Map(
                 location=[lat, lon],
                 zoom_start=10,
-                tiles="OpenStreetMap"
-            )
+                tiles="OpenStreetMap")
 
             folium.CircleMarker(
                 [lat, lon],
                 radius=10,
                 color="#0f2454",
-                fill=True
-            ).add_to(m)
+                fill=True).add_to(m)
 
-        st_folium(
-            m,
-            use_container_width=True,
-            height=450
-        )
+        st_folium(m, use_container_width=True,height=450)
 
 with col_kpi:
     with st.container(border=True):
@@ -135,11 +129,11 @@ with col_kpi:
             df = load_pensionamenti_provincia(regione, provincia, ente)
             df_view = df[(df["regione"] == regione) & (df["provincia"] == provincia) & (df["ente"] == ente)]
 
-        totale = int(df_view["numero_dipendenti"].sum())
+        totale = int(df_view["numero_pensionamenti"].sum())
 
         if len(df_view) > 0:
             rischio = round(
-                df_view["probabilita_media_pensionamento"].mean(), 2)
+                df_view["probabilita_media"].mean(), 2)
         else:
             rischio = 0
 
