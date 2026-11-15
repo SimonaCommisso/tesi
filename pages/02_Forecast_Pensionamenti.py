@@ -23,7 +23,7 @@ st.set_page_config(page_title="Forecast Pensionamenti", layout="wide")
 ruolo = st.session_state.get("ruolo")
 regione = st.session_state.get("regione")
 provincia = st.session_state.get("provincia")
-ente_nome = st.session_state.get("ente_nome")
+ente = st.session_state.get("ente_nome")
 
 # Caricamento topbar
 topbar()
@@ -37,26 +37,26 @@ if ruolo == Ruolo.ADMIN:
     df_annuale = load_pensionamenti_annuali()
 
 elif ruolo == Ruolo.VISUALIZZATORE_REGIONALE:
-    df = load_pensionamenti_regione(regione, ente_nome)
-    df = df[(df["regione"] == regione) & (df["ente_nome"] == ente_nome)]
+    df = load_pensionamenti_regione(regione, ente)
+    df = df[(df["regione"] == regione) & (df["ente"] == ente)]
 
 elif ruolo == Ruolo.VISUALIZZATORE_PROVINCIALE:
-    df = load_pensionamenti_provincia(regione, provincia, ente_nome)
-    df = df[(df["regione"] == regione) & (df["provincia"] == provincia) & (df["ente_nome"] == ente_nome)]
+    df = load_pensionamenti_provincia(regione, provincia, ente)
+    df = df[(df["regione"] == regione) & (df["provincia"] == provincia) & (df["ente"] == ente)]
     
 
 if ruolo == Ruolo.ADMIN:
     # 1. Pensionamento medio per Ente (con colore personalizzato e alias)
     st.subheader("Pensionamento medio per Ente")
     fig = px.bar(
-        df.groupby("ente_nome", as_index=False)
+        df.groupby("ente", as_index=False)
         .agg({"probabilita_media":"mean"})
         .sort_values("probabilita_media", ascending=False),
-        x="ente_nome",
+        x="ente",
         y="probabilita_media",
         color="probabilita_media",
         color_continuous_scale="Blues",
-        labels={"ente_nome": "Ente", "probabilita_media": "Probabilità Media"}
+        labels={"ente": "Ente", "probabilita_media": "Probabilità Media"}
     )
     st.plotly_chart(fig, use_container_width=True)
     st.divider()
@@ -64,15 +64,15 @@ if ruolo == Ruolo.ADMIN:
     # 2. Top 5 Enti a rischio (Barre orizzontali, orientate con scala di rosso)
     st.subheader("Top 5 Enti a rischio")
     fig = px.bar(
-        df.groupby("ente_nome", as_index=False)
+        df.groupby("ente", as_index=False)
         .agg({"probabilita_media":"mean"})
         .sort_values("probabilita_media", ascending=True).tail(5), # .tail(5) con ascending=True mette i più alti in alto
         x="probabilita_media",
-        y="ente_nome",
+        y="ente",
         orientation="h",
         color="probabilita_media",
         color_continuous_scale="Reds",
-        labels={"ente_nome": "Ente", "probabilita_media": "Probabilità Media"}
+        labels={"ente": "Ente", "probabilita_media": "Probabilità Media"}
     )
     st.plotly_chart(fig, use_container_width=True)
     st.divider()

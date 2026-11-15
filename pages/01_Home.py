@@ -57,6 +57,10 @@ st.markdown("""### Home""")
 
 col_mappa, col_kpi = st.columns([2,1])
 
+# ============================================================
+# Grafico Mappa
+# ============================================================
+
 with col_mappa:
 
     with st.container(border=True):
@@ -129,6 +133,10 @@ with col_kpi:
             df = load_pensionamenti_provincia(regione, provincia, ente)
             df_view = df[(df["regione"] == regione) & (df["provincia"] == provincia) & (df["ente"] == ente)]
 
+        # ============================================================
+        # Grafico Pensionamenti KPI
+        # ============================================================
+
         totale = int(df_view["numero_pensionamenti"].sum())
 
         if len(df_view) > 0:
@@ -139,6 +147,42 @@ with col_kpi:
 
         st.metric("Pensionamenti Previsti", f"{totale:,}")
         st.metric( "Probabilità Media Pensionamento", f"{rischio}%")
+        
+        # ============================================================
+        # Grafico Pensionamenti per Qualifica
+        # ============================================================
+        st.markdown("##### 👥 Pensionamenti per Qualifica")
+        
+        if len(df_view) > 0:
+            # Aggreghiamo i dati raggruppando per qualifica e sommando i pensionamenti
+            df_qualifica = (
+                df_view.groupby("qualifica", as_index=False)
+                .agg({"numero_pensionamenti": "sum"})
+                .sort_values("numero_pensionamenti", ascending=True) # Ascending per metterli in ordine corretto nel grafico orizzontale
+            )
+            
+            fig_qual = px.bar(
+                df_qualifica,
+                x="numero_pensionamenti",
+                y="qualifica",
+                orientation="h",
+                color="numero_pensionamenti",
+                color_continuous_scale="Blues",
+                labels={"numero_pensionamenti": "N. Pensionamenti", "qualifica": "Qualifica"}
+            )
+            
+            # Ottimizziamo il layout per farlo compatto dentro la card laterale
+            fig_qual.update_layout(
+                margin=dict(l=0, r=0, t=10, b=10),
+                height=260,
+                xaxis_title=None,
+                yaxis_title=None,
+                coloraxis_showscale=False # Nasconde la barra della scala colori per pulizia visiva
+            )
+            
+            st.plotly_chart(fig_qual, use_container_width=True)
+        else:
+            st.info("Nessun dato disponibile per il dettaglio qualifiche.")
     
 
 # ============================================================
