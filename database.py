@@ -98,6 +98,7 @@ def load_last_refresh():
         return None
     return df.iloc[0]["timestamp_refresh"]
 
+
 def load_enti_visibili():
     conn = get_connection()
     query = """SELECT DISTINCT ente_id, ente FROM tesi.pubblica_amministrazione_tesi.dim_ente"""
@@ -108,13 +109,30 @@ def load_enti_visibili():
 # ============================================================
 # PAGE: 02_Forecast_Pensionamenti
 # ============================================================
-# Caricamento dei dati dal modello di Forecast Pensionamenti
-def load_pensionamenti():
+# Caricamento dei dati livello Nazionale
+def load_pensionamenti_nazionali():
     conn = get_connection()
-    query = """SELECT * FROM tesi.pubblica_amministrazione_tesi.result_ml1_forecast_pensionamenti"""
-    df = pd.read_sql(query, conn)
-    conn.close()
-    return apply_role_filter(df)
+    query = """SELECT * FROM tesi.pubblica_amministrazione_tesi.result_ml1_forecast_pensionamenti_nazionale"""
+    return pd.read_sql(query, conn)
+
+# Caricamento dei dati livello Regione
+def load_pensionamenti_regione(regione, ente):
+    conn = get_connection()
+    query = """SELECT * FROM tesi.pubblica_amministrazione_tesi.result_ml1_forecast_pensionamenti_regionale WHERE regione = ? AND ente=?"""
+    return pd.read_sql(query, conn, params=(regione,ente))
+
+# Caricamento dei dati livello Provincia
+def load_pensionamenti_provincia(regione, provincia, ente):
+    conn = get_connection()
+    query = """SELECT * FROM tesi.pubblica_amministrazione_tesi.result_ml1_forecast_pensionamenti_provincia WHERE regione = ? AND provincia = ? AND ente=?"""
+    return pd.read_sql(query, conn, params=(regione, provincia, ente))
+
+# Caricamento dei dati livello Provincia
+def load_pensionamenti_annuali():
+    conn = get_connection()
+    query = """SELECT * FROM tesi.pubblica_amministrazione_tesi.result_ml1_forecast_pensionamenti_anno"""
+    return pd.read_sql(query, conn)
+
 
 # ============================================================
 # PAGE: 02_Forecast_Pensionamenti
@@ -123,33 +141,38 @@ def load_pensionamenti():
 def load_ai_impact():
     conn = get_connection()
     query = """SELECT * FROM tesi.pubblica_amministrazione_tesi.result_ml2_ai_impact_analysis"""
-    df = pd.read_sql(query, conn)
-    conn.close()
-    return apply_role_filter(df)
-
+    return pd.read_sql(query, conn)
+  
 # Caricamento dei dati dal modello per l'analisi delle competenze future
 def load_future_skills():
     conn = get_connection()
     query = """SELECT * FROM tesi.pubblica_amministrazione_tesi.result_ml2_future_skills_forecast"""
-    df = pd.read_sql(query, conn)
-    conn.close()
-    return apply_role_filter(df)
+    return pd.read_sql(query, conn)
 
 # Caricamento dei dati dal modello per l'analisi delle competenze critiche
 def load_skill_critiche():
     conn = get_connection()
     query = """SELECT * FROM tesi.pubblica_amministrazione_tesi.result_ml2_skill_critiche"""
-    df = pd.read_sql(query, conn)
-    conn.close()
-    return apply_role_filter(df)
+    return pd.read_sql(query, conn)
 
 # Caricamento dei dati dal modello per l'analisi della perdita di competenze
 def load_skill_loss():
     conn = get_connection()
     query = """SELECT * FROM tesi.pubblica_amministrazione_tesi.result_ml2_skill_loss_forecast"""
-    df = pd.read_sql(query, conn)
-    conn.close()
-    return apply_role_filter(df)
+    return pd.read_sql(query, conn)
+
+# Caricamento dei dati dal modello per l'analisi della perdita di competenze livello regionale
+def load_skill_loss_ente_reg(regione, ente):
+    conn = get_connection()
+    query = """SELECT * FROM tesi.pubblica_amministrazione_tesi.result_ml2_skill_loss_ente_regione WHERE regione=? AND ente_id=?"""
+    return pd.read_sql(query, conn, params=(regione, ente))
+
+# Caricamento dei dati dal modello per l'analisi della perdita di competenze livello provinciale
+def load_skill_loss_ente_prov(regione, provincia, ente):
+    conn = get_connection()
+    query = """SELECT * FROM tesi.pubblica_amministrazione_tesi.result_ml2_skill_loss_ente_regione WHERE regione=? AND provincia=? AND ente_id=?"""
+    return pd.read_sql(query, conn, params=(regione, provincia, ente))
+
 
 # ============================================================
 # PAGE: 04_Burnout_Forecast
@@ -158,6 +181,4 @@ def load_skill_loss():
 def load_burnout():
     conn = get_connection()
     query = """SELECT * FROM tesi.pubblica_amministrazione_tesi.result_ml3_predictions_burnout"""
-    df = pd.read_sql(query, conn)
-    conn.close()
-    return apply_role_filter(df)
+    return pd.read_sql(query, conn)

@@ -3,7 +3,7 @@ import requests
 import pandas as pd
 from style import load_css
 from components import topbar
-from database import load_last_refresh, load_pensionamenti
+from database import load_last_refresh, load_pensionamenti_nazionali
 from streamlit_folium import st_folium
 import folium
 from utility.coordinate import get_coordinate_regione, get_coordinate_provincia
@@ -120,7 +120,7 @@ with col_kpi:
             '<div class="dashboard-title">📈 Forecast Pensionamenti</div>',
             unsafe_allow_html=True)
 
-        df = load_pensionamenti()
+        df = load_pensionamenti_nazionali()
 
         regione = st.session_state.get("regione")
         provincia = st.session_state.get("provincia")
