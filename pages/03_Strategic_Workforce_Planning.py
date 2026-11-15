@@ -93,4 +93,6 @@ fig = px.bar(
 st.plotly_chart(fig, use_container_width=True)
 st.divider()
     
+st.markdown('<div class="custom-page-link">', unsafe_allow_html=True)
 st.page_link("pages/01_Home.py", label="Torna alla Home", icon="🏠")
+st.markdown('</div>', unsafe_allow_html=True)
