@@ -5,10 +5,7 @@ from database import load_users, load_ente_user
 from style import load_css_login_page
 from utility.costanti import Ruolo
 
-st.set_page_config(
-    page_title="HR Analytics Dashboard",
-    layout="wide"
-)
+st.set_page_config(page_title="HR Analytics Dashboard", layout="wide")
 
 # ============================================================
 # LOGIN STATE
@@ -49,15 +46,11 @@ if not st.session_state.logged:
                 """, unsafe_allow_html=True)
 
                 with st.form("login_form"):
-
                     username = st.text_input("Username", placeholder="Inserisci username")
-
-                    password = st.text_input("Password",
-                        type="password", placeholder="••••••••")
-
+                    password = st.text_input("Password",type="password", placeholder="••••••••")
                     st.write("")
 
-                    submit_button = st.form_submit_button("Accedi", width=True)
+                    submit_button = st.form_submit_button("Accedi", width='stretch')
 
                 if submit_button:
                     users = load_users()

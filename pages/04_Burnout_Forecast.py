@@ -103,7 +103,7 @@ with col1:
     )
     fig1.update_traces(textposition="inside", textinfo="percent+label")
     fig1.update_layout(margin=dict(t=20, b=20, l=10, r=10))
-    st.plotly_chart(fig1, use_container_width=True)
+    st.plotly_chart(fig1, width='stretch')
 
 with col2:
     st.subheader("Burnout Medio per Fascia d'Età")
@@ -128,7 +128,7 @@ with col2:
     )
     fig2.update_traces(marker_line_color="rgba(0,0,0,0.2)", marker_line_width=1, textposition="outside")
     fig2.update_layout(margin=dict(t=20, b=20, l=10, r=10))
-    st.plotly_chart(fig2, use_container_width=True)
+    st.plotly_chart(fig2, width='stretch')
 
 st.divider()
 
@@ -153,7 +153,7 @@ with col3:
         }
     )
     fig3.update_layout(margin=dict(t=20, b=20, l=10, r=10))
-    st.plotly_chart(fig3, use_container_width=True)
+    st.plotly_chart(fig3, width='stretch')
 
 with col4:
     st.subheader("Performance vs Burnout")
@@ -171,7 +171,7 @@ with col4:
         }
     )
     fig4.update_layout(margin=dict(t=20, b=20, l=10, r=10))
-    st.plotly_chart(fig4, use_container_width=True)
+    st.plotly_chart(fig4, width='stretch')
 
 st.divider()
 tasto_torna_home()

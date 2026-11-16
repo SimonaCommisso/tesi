@@ -93,7 +93,7 @@ if ruolo == Ruolo.ADMIN:
             labels={"rischio_ai": "Rischio AI Medio", "categoria_skill": "Categoria"}
         )
         fig1.update_traces(textposition="outside")
-        st.plotly_chart(rifinisci_grafico(fig1), use_container_width=True)
+        st.plotly_chart(rifinisci_grafico(fig1), width='stretch')
 
     # 2. Competenze future con maggiore crescita
     with col2:
@@ -108,7 +108,7 @@ if ruolo == Ruolo.ADMIN:
             color_continuous_scale=px.colors.sequential.Blues[2:],
             labels={"domanda_prevista": "Domanda Prevista", "nome": "Competenza"}
         )
-        st.plotly_chart(rifinisci_grafico(fig2), use_container_width=True)
+        st.plotly_chart(rifinisci_grafico(fig2), width='stretch')
 
     st.divider()
     col3, col4 = st.columns(2, gap="large")
@@ -126,7 +126,7 @@ if ruolo == Ruolo.ADMIN:
             color_discrete_map={True: "#d9534f", False: "#5bc0de", "Si": "#d9534f", "No": "#5bc0de"},
             labels={"indice_criticita": "Indice di Criticità", "nome": "Competenza", "strategica": "Strategica"}
         )
-        st.plotly_chart(rifinisci_grafico(fig3), use_container_width=True)
+        st.plotly_chart(rifinisci_grafico(fig3), width='stretch')
 
     # 4. Perdita di competenze
     with col4:
@@ -145,7 +145,7 @@ if ruolo == Ruolo.ADMIN:
                 "indice_criticita_sostituzione": "Criticità Sost."
             }
         )
-        st.plotly_chart(rifinisci_grafico(fig4), use_container_width=True)
+        st.plotly_chart(rifinisci_grafico(fig4), width='stretch')
 
 
 # ============================================================
@@ -192,7 +192,7 @@ elif ruolo == Ruolo.VISUALIZZATORE_REGIONALE:
                         color_continuous_scale=px.colors.sequential.Teal[2:],
                         labels={"frequenza": "Occorrenze a Rischio", "competenza": "Competenza"}
                     )
-                    st.plotly_chart(rifinisci_grafico(fig_r1), use_container_width=True)
+                    st.plotly_chart(rifinisci_grafico(fig_r1), width='stretch')
                 else:
                     st.info("Nessun dettaglio sulle singole competenze disponibile.")
 
@@ -218,7 +218,7 @@ elif ruolo == Ruolo.VISUALIZZATORE_REGIONALE:
                     text_auto=True,
                     color_discrete_sequence=["#2b5c8f", "#e06d53"]
                 )
-                st.plotly_chart(rifinisci_grafico(fig_r2), use_container_width=True)
+                st.plotly_chart(rifinisci_grafico(fig_r2), width='stretch')
 
 
 # ============================================================
@@ -264,7 +264,7 @@ elif ruolo == Ruolo.VISUALIZZATORE_PROVINCIALE:
                         color_continuous_scale=px.colors.sequential.Purples[2:],
                         labels={"frequenza": "Occorrenze a Rischio", "competenza": "Competenza"}
                     )
-                    st.plotly_chart(rifinisci_grafico(fig_p1), use_container_width=True)
+                    st.plotly_chart(rifinisci_grafico(fig_p1), width='stretch')
                 else:
                     st.info("Nessun dettaglio sulle singole competenze disponibile.")
 
@@ -290,7 +290,7 @@ elif ruolo == Ruolo.VISUALIZZATORE_PROVINCIALE:
                     text_auto=True,
                     color_discrete_sequence=["#5e3c99", "#e66101"]
                 )
-                st.plotly_chart(rifinisci_grafico(fig_p2), use_container_width=True)
+                st.plotly_chart(rifinisci_grafico(fig_p2), width='stretch')
 
 else:
     st.error("Ruolo non riconosciuto.")

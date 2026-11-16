@@ -76,7 +76,7 @@ if ruolo == Ruolo.ADMIN:
             color_continuous_scale=px.colors.sequential.Blues[2:],
             labels={"ente": "Ente", "probabilita_media": "Probabilità Media"}
         )
-        st.plotly_chart(rifinisci_barre(fig1), use_container_width=True)
+        st.plotly_chart(rifinisci_barre(fig1), width='stretch')
 
     with col2:
         st.subheader("Top 5 Enti a rischio")
@@ -92,7 +92,7 @@ if ruolo == Ruolo.ADMIN:
             color_continuous_scale=px.colors.sequential.Reds[2:],
             labels={"ente": "Ente", "probabilita_media": "Probabilità Media"}
         )
-        st.plotly_chart(rifinisci_barre(fig2), use_container_width=True)
+        st.plotly_chart(rifinisci_barre(fig2), width='stretch')
 
     st.divider()
     col3, col4 = st.columns(2, gap="large")
@@ -108,7 +108,7 @@ if ruolo == Ruolo.ADMIN:
             color_continuous_scale=px.colors.sequential.Greens[2:],
             labels={"qualifica": "Qualifica Professionale", "probabilita_media": "Probabilità Media"}
         )
-        st.plotly_chart(rifinisci_barre(fig3), use_container_width=True)
+        st.plotly_chart(rifinisci_barre(fig3), width='stretch')
 
     with col4:
         st.subheader("Pensionamenti previsti per anno")
@@ -121,7 +121,7 @@ if ruolo == Ruolo.ADMIN:
         )
         fig4.update_traces(line_color="#FF4B4B", marker=dict(size=8))
         fig4.update_layout(margin=dict(t=20, b=20, l=10, r=10))
-        st.plotly_chart(fig4, use_container_width=True)
+        st.plotly_chart(fig4, width='stretch')
 
 
 # ===========================================================
@@ -142,7 +142,7 @@ elif ruolo == Ruolo.VISUALIZZATORE_REGIONALE:
             color_continuous_scale=px.colors.sequential.Viridis,
             labels={"provincia": "Provincia", "probabilita_media": "Probabilità Media"}
         )
-        st.plotly_chart(rifinisci_barre(fig_geo), use_container_width=True)
+        st.plotly_chart(rifinisci_barre(fig_geo), width='stretch')
 
     with col2:
         st.subheader("Qualifiche più esposte")
@@ -156,7 +156,7 @@ elif ruolo == Ruolo.VISUALIZZATORE_REGIONALE:
             color_continuous_scale=px.colors.sequential.Teal[2:],
             labels={"qualifica": "Qualifica", "probabilita_media": "Probabilità Media"}
         )
-        st.plotly_chart(rifinisci_barre(fig_qual), use_container_width=True)
+        st.plotly_chart(rifinisci_barre(fig_qual), width='stretch')
 
 
 # ===========================================================
@@ -184,7 +184,7 @@ elif ruolo == Ruolo.VISUALIZZATORE_PROVINCIALE:
             color_continuous_scale=px.colors.sequential.Purples[2:],
             labels={"qualifica": "Qualifica", "probabilita_media": "Probabilità Media"}
         )
-        st.plotly_chart(rifinisci_barre(fig1), use_container_width=True)
+        st.plotly_chart(rifinisci_barre(fig1), width='stretch')
 
     with col2:
         st.subheader("Pensionamenti Previsti per Ente")
@@ -198,7 +198,7 @@ elif ruolo == Ruolo.VISUALIZZATORE_PROVINCIALE:
             color_continuous_scale=px.colors.sequential.Blues[2:],
             labels={"ente": "Ente", "numero_pensionamenti": "Pensionamenti Previsti"}
         )
-        st.plotly_chart(rifinisci_barre(fig2), use_container_width=True)
+        st.plotly_chart(rifinisci_barre(fig2), width='stretch')
 
 st.divider()
 tasto_torna_home()
