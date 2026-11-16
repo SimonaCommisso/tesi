@@ -10,8 +10,7 @@ from database import (
     load_future_skills,
     load_skill_critiche,
     load_skill_loss,
-    load_skill_loss_ente_reg,
-    load_skill_loss_ente_prov
+    load_skill_loss_ente
 )
 
 # ============================================================
@@ -156,7 +155,7 @@ elif ruolo == Ruolo.VISUALIZZATORE_REGIONALE:
     if not regione or ente_id is None:
         mostra_nessun_dato("(Parametri regione o ente mancanti nel profilo)")
     else:
-        df_reg = load_skill_loss_ente_reg(regione, ente_id)
+        df_reg = load_skill_loss_ente(regione, None, ente_id)
 
         if df_reg is None or df_reg.empty:
             mostra_nessun_dato(f"(Regione: {regione})")
@@ -229,7 +228,7 @@ elif ruolo == Ruolo.VISUALIZZATORE_PROVINCIALE:
     if not regione or not provincia or ente_id is None:
         mostra_nessun_dato("(Parametri regione, provincia o ente mancanti nel profilo)")
     else:
-        df_prov = load_skill_loss_ente_prov(regione, provincia, ente_id)
+        df_prov = load_skill_loss_ente(regione, provincia, ente_id)
 
         if df_prov is None or df_prov.empty:
             mostra_nessun_dato(f"(Regione: {regione} - Provincia: {provincia})")

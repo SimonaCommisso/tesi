@@ -196,21 +196,28 @@ def load_skill_loss():
     finally:
             conn.close()
 
-# Caricamento dei dati dal modello per l'analisi della perdita di competenze livello regionale
-def load_skill_loss_ente_reg(regione, ente_id):
-    conn = get_connection()
-    try:
-        query = """SELECT * FROM tesi.pubblica_amministrazione_tesi.result_ml2_skill_loss_ente_regione WHERE regione=? AND ente_id=?"""
-        return pd.read_sql(query, conn, params=(regione, ente_id))
-    finally:
-            conn.close()
-
-# Caricamento dei dati dal modello per l'analisi della perdita di competenze livello provinciale
-def load_skill_loss_ente_prov(regione, provincia, ente_id):
+# Caricamento dei dati dal modello per l'analisi della perdita di competenze
+def load_skill_loss_ente(regione=None, provincia=None, ente_id=None):
     conn = get_connection()
     try: 
-        query = """SELECT * FROM tesi.pubblica_amministrazione_tesi.result_ml2_skill_loss_ente_regione WHERE regione=? AND provincia=? AND ente_id=?"""
-        return pd.read_sql(query, conn, params=(regione, provincia, ente_id))
+        query = "SELECT * FROM tesi.pubblica_amministrazione_tesi.result_ml2_skill_loss_ente WHERE 1=1"
+        params = []
+
+        if regione is not None:
+            query += " AND regione = %s"
+            params.append(regione)
+
+        if provincia is not None:
+            query += " AND provincia = %s"
+            params.append(provincia)
+
+        if ente_id is not None:
+            query += " AND ente_id = %s"
+            params.append(ente_id)
+
+        if params:
+            return pd.read_sql(query, conn, params=tuple(params))
+        return pd.read_sql(query, conn)
     finally:
             conn.close()
             
@@ -219,10 +226,26 @@ def load_skill_loss_ente_prov(regione, provincia, ente_id):
 # PAGE: 04_Burnout_Forecast
 # ============================================================
 # Caricamento dei dati dal modello per l'analisi del rischio di burnout
-def load_burnout():
+def load_burnout(regione=None, provincia=None, ente_id=None):
     conn = get_connection()
-    try: 
-        query = """SELECT * FROM tesi.pubblica_amministrazione_tesi.result_ml3_predictions_burnout"""
+    try:
+        query = "SELECT * FROM tesi.pubblica_amministrazione_tesi.result_ml3_predictions_burnout WHERE 1=1"
+        params = []
+
+        if regione is not None:
+            query += " AND regione = %s"
+            params.append(regione)
+
+        if provincia is not None:
+            query += " AND provincia = %s"
+            params.append(provincia)
+
+        if ente_id is not None:
+            query += " AND ente_id = %s"
+            params.append(ente_id)
+
+        if params:
+            return pd.read_sql(query, conn, params=tuple(params))
         return pd.read_sql(query, conn)
     finally:
-            conn.close()
+        conn.close()
