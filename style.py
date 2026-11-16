@@ -43,7 +43,7 @@ def load_css_login_page():
         }
     
         .login-title {
-            margin-top: -28px
+            margin-top: -28px;
             font-size: 44px;
             font-weight: 800;
             color: #002b4f;
