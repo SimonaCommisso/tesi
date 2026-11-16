@@ -13,11 +13,22 @@ def get_connection():
 # Caricamento dei dati degli utenti
 def load_users():
     conn = get_connection()
-    query = """
-    SELECT * FROM tesi.pubblica_amministrazione_tesi.app_users """
-    return pd.read_sql(query, conn)
+    try: 
+        query = """
+        SELECT * FROM tesi.pubblica_amministrazione_tesi.app_users """
+        return pd.read_sql(query, conn)
+    finally:
+        conn.close()
 
-
+# Caricamento dell'ente
+def load_ente_user(ente):
+    conn = get_connection()
+    try:
+        query = """SELECT nome AS ente_nome FROM tesi.pubblica_amministrazione_tesi.dim_ente
+                    WHERE ente_id = ? """
+        return pd.read_sql(query, conn, params=(ente))
+    finally:
+        conn.close()
 
 # ============================================================
 # FILTRO RUOLO

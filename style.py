@@ -1,5 +1,68 @@
 import streamlit as st
 
+# CSS PAGINA LOGIN
+def load_css_login_page():
+    st.markdown("""
+        <style>
+    
+        .stApp {
+            background-color: #004678;
+        }
+    
+        section[data-testid="stSidebar"] {
+            display: none;
+        }
+    
+        button[kind="header"] {
+            display: none;
+        }
+    
+        .main .block-container {
+            padding-top: 6rem;
+            max-width: 1400px;
+        }
+    
+        .login-title {
+            font-size: 48px;
+            font-weight: 800;
+            color: #0f2454;
+            text-align: center;
+            margin-bottom: 8px;
+        }
+    
+        .login-subtitle {
+            font-size: 18px;
+            color: #56606b;
+            text-align: center;
+            line-height: 1.5;
+            margin-bottom: 35px;
+        }
+    
+        div[data-baseweb="input"] {
+            border-radius: 12px;
+            border: 1px solid #d9dee5;
+            background-color: #f5f7fa;
+        }
+    
+        div[data-testid="stFormSubmitButton"] button {
+            background-color: #004678;
+            color: white;
+            height: 52px;
+            border-radius: 12px;
+            border: none;
+            font-size: 18px;
+            font-weight: 600;
+        }
+    
+        div[data-testid="stFormSubmitButton"] button:hover {
+            background-color: #005f9e;
+            color: white;
+        }
+    
+        </style>""", unsafe_allow_html=True)
+    
+
+# CSS GENERICO
 def load_css():
 
     st.markdown("""
@@ -25,7 +88,6 @@ def load_css():
     [data-testid="column"] {
         background-color: white;
         border-radius: 20px;
-        height: 605px;
         padding: 20px;
         border: 1px solid #dce1ea;
         box-shadow: 0px 4px 12px rgba(15,36,84,0.08);
@@ -34,8 +96,8 @@ def load_css():
     </style>
     """, unsafe_allow_html=True)
     
-    
-    
+
+# CSS TASTO TORNA ALLA HOME 
 def load_css_tasto_home():
     
     st.markdown("""
@@ -67,3 +129,5 @@ def load_css_tasto_home():
         }
     </style>
         """, unsafe_allow_html=True)
+    
+    
