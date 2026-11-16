@@ -137,23 +137,25 @@ def load_pensionamenti(regione=None, provincia=None, ente=None):
         params = []
 
         if pd.notna(regione) and str(regione).strip() != "":
-            query += " AND regione =?"
-            params.append(regione)
+            query += " AND regione = ?"
+            params.append(str(regione).strip())
 
         if pd.notna(provincia) and str(provincia).strip() != "":
-            query += " AND provincia =?"
-            params.append(provincia)
+            query += " AND provincia = ?"
+            params.append(str(provincia).strip())
 
         if pd.notna(ente) and str(ente).strip() != "":
-            query += " AND ente =?"
-            params.append(ente)
+            query += " AND ente = ?"
+            params.append(str(ente).strip())
 
-        if params:
-            return pd.read_sql(query, conn, params=tuple(params))
-        return pd.read_sql(query, conn)
+        with conn.cursor() as cursor:
+            cursor.execute(query, params)
+            columns = [desc[0] for desc in cursor.description]
+            rows = cursor.fetchall()
+            return pd.DataFrame(rows, columns=columns)
     finally:
         conn.close()
-
+        
 # Caricamento dei dati annuali
 def load_pensionamenti_annuali(): 
     conn = get_connection()
