@@ -42,7 +42,7 @@ st.title("🏛️ Home")
 # ULTIMO AGGIORNAMENTO
 # ============================================================
 
-col_agg, col_tasto = st.columns([2,1])
+col_agg, col_tasto = st.columns([8,1])
 with col_agg:
     try:
         ultima_data = load_last_refresh()
@@ -87,7 +87,7 @@ col_mappa, col_kpi = st.columns([2,1])
 
 with col_mappa:
 
-    with st.container(border=True):
+    with st.container(border=True, height=520):
 
         st.markdown('<div class="dashboard-title">🗺️ Ambito Territoriale</div>', unsafe_allow_html=True)
         regione = st.session_state.get("regione")
@@ -132,10 +132,10 @@ with col_mappa:
                 color="#0f2454",
                 fill=True).add_to(m)
 
-        st_folium(m, use_container_width=True,height=450)
+        st_folium(m, width='stretch', height=360)
 
 with col_kpi:
-    with st.container(border=True):
+    with st.container(border=True, height=520):
         st.markdown(
             '<div class="dashboard-title">📈 Forecast Pensionamenti</div>',
             unsafe_allow_html=True)
@@ -207,7 +207,7 @@ with col_kpi:
                 yaxis_title=None,
                 coloraxis_showscale=False # Nasconde la barra della scala colori per pulizia visiva
             )
-            
+            fig_qual.update_layout(height=270)
             st.plotly_chart(fig_qual, use_container_width=True)
         else:
             st.info("Nessun dato disponibile per il dettaglio qualifiche.")
