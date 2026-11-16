@@ -27,7 +27,7 @@ if not st.session_state.logged:
     col_left, col_center, col_right = st.columns([1, 8, 1])
 
     with col_center:
-        with st.container():
+        with st.container(border=True):
 
             col_form, col_img = st.columns([1, 1], gap="large")
 
