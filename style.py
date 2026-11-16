@@ -84,6 +84,7 @@ def load_css_login_page():
             background-color:white;
             border-radius:24px;
             padding:35px;
+            margin-bottom: 85px;
         }
     
         </style>""", unsafe_allow_html=True)
