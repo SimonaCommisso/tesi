@@ -57,8 +57,7 @@ if not st.session_state.logged:
 
                     st.write("")
 
-                    submit_button = st.form_submit_button("Accedi",
-                        use_container_width=True)
+                    submit_button = st.form_submit_button("Accedi", width=True)
 
                 if submit_button:
                     users = load_users()
