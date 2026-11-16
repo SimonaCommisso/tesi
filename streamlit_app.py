@@ -94,7 +94,7 @@ if not st.session_state.logged:
             # --------------------------------------------------
 
             with col_img:
-                st.image("./assets/img/HR Analytics Dashboard login.png", use_container_width=True)
+                st.image("./assets/img/HR Analytics Dashboard login.png", width='stretch')
             
     st.stop()
 # ============================================================
