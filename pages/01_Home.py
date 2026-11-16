@@ -149,7 +149,7 @@ with col_kpi:
 
         elif ruolo == Ruolo.VISUALIZZATORE_REGIONALE:
             
-            df = load_pensionamenti(regione, None, ente)
+            df = load_pensionamenti(regione, provincia, ente)
             df_view = df[(df["regione"] == regione) & (df["ente"] == ente)]
 
         else:
