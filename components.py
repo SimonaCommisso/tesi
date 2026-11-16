@@ -1,5 +1,7 @@
 import streamlit as st
 
+from utility.costanti import Ruolo
+
 def topbar():
 
     st.markdown("""
@@ -146,14 +148,14 @@ def topbar():
 
                 st.write(f"**Ruolo:** {ruolo}")
 
-                if ruolo == "Visualizzatore Regionale":
+                if ruolo == Ruolo.VISUALIZZATORE_REGIONALE:
                     st.write(f"**Regione:** {st.session_state.regione}")
 
-                elif ruolo == "Visualizzatore Provinciale":
+                elif ruolo == Ruolo.VISUALIZZATORE_PROVINCIALE:
                     st.write(f"**Regione:** {st.session_state.regione}")
                     st.write(f"**Provincia:** {st.session_state.provincia}")
 
-                elif ruolo != "Admin":
+                if ruolo != Ruolo.ADMIN:
                     st.write(f"**Ente:** {st.session_state.ente}")
 
                 st.divider()

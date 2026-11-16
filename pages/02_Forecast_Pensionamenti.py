@@ -188,7 +188,7 @@ elif ruolo == Ruolo.VISUALIZZATORE_PROVINCIALE:
     with col2:
         st.subheader("Pensionamenti Previsti per Ente")
         fig2 = px.bar(
-            df.groupby("Ente", as_index=False)
+            df.groupby("ente", as_index=False)
             .agg({"numero_pensionamenti": "sum"})
             .sort_values("numero_pensionamenti", ascending=False),
             x="Ente",
