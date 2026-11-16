@@ -156,7 +156,7 @@ def topbar():
                     st.write(f"**Provincia:** {st.session_state.provincia}")
 
                 if ruolo != Ruolo.ADMIN:
-                    st.write(f"**Ente:** {st.session_state.ente}")
+                    st.write(f"**Ente:** {st.session_state.ente_nome}")
 
                 st.divider()
 
