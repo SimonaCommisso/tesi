@@ -150,9 +150,9 @@ with col_kpi:
         else:
             rischio = 0
 
-        st.markdown(f"#### Pensionamenti Previsti\n### {totale:,}")
+        st.markdown(f"#### Pensionamenti Previsti: {totale:,}")
 
-        st.markdown(f"#### Probabilità Media Pensionamento\n### {rischio:,}%")
+        st.markdown(f"#### Probabilità Media Pensionamento: {rischio:,}%")
         
         # ============================================================
         # Grafico Pensionamenti per Qualifica
