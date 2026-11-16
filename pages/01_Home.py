@@ -42,16 +42,36 @@ st.title("🏛️ Home")
 # ULTIMO AGGIORNAMENTO
 # ============================================================
 
-try:
-    ultima_data = load_last_refresh()
-    if ultima_data is not None:
-        ultima_data = pd.to_datetime(ultima_data).strftime("%d/%m/%Y %H:%M:%S")
-        st.success(f"🕒 Ultimo aggiornamento modelli: {ultima_data}")
-    else:
-        st.warning("⚠️ Nessun aggiornamento disponibile")
-except Exception as e:
-    st.error(f"Errore nel caricamento della data: {e}")
+col_agg, col_tasto = st.columns([2,1])
+with col_agg:
+    try:
+        ultima_data = load_last_refresh()
+        if ultima_data is not None:
+            ultima_data = pd.to_datetime(ultima_data).strftime("%d/%m/%Y %H:%M:%S")
+            st.success(f"🕒 Ultimo aggiornamento modelli: {ultima_data}")
+        else:
+            st.warning("⚠️ Nessun aggiornamento disponibile")
+    except Exception as e:
+        st.error(f"Errore nel caricamento della data: {e}")
+with col_tasto:
+    # AGGIORNA MODELLI
+    if st.button("🔄 Aggiorna i Dati"):
+        url = f"https://{HOST}/api/2.1/jobs/run-now"
+        headers = {"Authorization": f"Bearer {TOKEN}"}
+        payload = {"job_id": JOB_ID}
 
+        response = requests.post(
+            url,
+            headers=headers,
+            json=payload
+        )
+
+        if response.status_code == 200:
+            run_id = response.json()["run_id"]
+            st.success(f"✅ Dati caricati correttamente")
+        else:
+            st.error(f"Errore nel caricamento dei dati: {response.text}")
+            
 # ============================================================
 # DASHBOARD OVERVIEW
 # ============================================================
@@ -92,10 +112,8 @@ with col_mappa:
                 tiles="OpenStreetMap"
             )
 
-            folium.Marker(
-                [lat, lon],
-                popup=regione
-            ).add_to(m)
+            folium.Marker([lat, lon],
+                popup=regione).add_to(m)
 
         elif ruolo == Ruolo.VISUALIZZATORE_PROVINCIALE:
 
@@ -150,10 +168,11 @@ with col_kpi:
         else:
             rischio = 0
 
-        st.markdown(f"#### Pensionamenti Previsti: {totale:,}")
+        st.markdown(f"##### Pensionamenti Previsti: {totale:,}")
 
-        st.markdown(f"#### Probabilità Media Pensionamento: {rischio:,}%")
+        st.markdown(f"##### Probabilità Media Pensionamento: {rischio:,}%")
         
+        st.write()
         # ============================================================
         # Grafico Pensionamenti per Qualifica
         # ============================================================
@@ -191,24 +210,3 @@ with col_kpi:
         else:
             st.info("Nessun dato disponibile per il dettaglio qualifiche.")
     
-
-# ============================================================
-# AGGIORNA MODELLI
-# ============================================================
-
-if st.button("🔄 Aggiorna i Dati"):
-    url = f"https://{HOST}/api/2.1/jobs/run-now"
-    headers = {"Authorization": f"Bearer {TOKEN}"}
-    payload = {"job_id": JOB_ID}
-
-    response = requests.post(
-        url,
-        headers=headers,
-        json=payload
-    )
-
-    if response.status_code == 200:
-        run_id = response.json()["run_id"]
-        st.success(f"✅ Dati caricati correttamente")
-    else:
-        st.error(f"Errore nel caricamento dei dati: {response.text}")
