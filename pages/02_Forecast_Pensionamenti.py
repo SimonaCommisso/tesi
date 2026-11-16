@@ -105,7 +105,7 @@ if ruolo == Ruolo.ADMIN:
             .sort_values("probabilita_media", ascending=False),
             x="qualifica",
             y="probabilita_media",
-            color_discrete_sequence=["#29b5e8"],
+            color_continuous_scale=px.colors.sequential.Greens[2:],
             labels={"qualifica": "Qualifica Professionale", "probabilita_media": "Probabilità Media"}
         )
         st.plotly_chart(rifinisci_barre(fig3), use_container_width=True)
