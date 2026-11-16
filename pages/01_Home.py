@@ -56,7 +56,7 @@ except Exception as e:
 # DASHBOARD OVERVIEW
 # ============================================================
 
-st.markdown("""### Home""")
+st.markdown("""### Dashboard Overview""")
 
 col_mappa, col_kpi = st.columns([2,1])
 

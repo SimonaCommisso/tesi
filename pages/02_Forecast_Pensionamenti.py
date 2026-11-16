@@ -7,7 +7,6 @@ from database import (
     load_pensionamenti_annuali
 )
 from components import topbar, tasto_torna_home
-from style import load_css_tasto_home
 from utility.costanti import Ruolo
 
 #===========================================================
@@ -27,7 +26,6 @@ ente = st.session_state.get("ente_nome")
 
 # Caricamento topbar
 topbar()
-load_css_tasto_home()
 
 st.title("📈 Forecast Pensionamenti")
 
@@ -58,6 +56,7 @@ if ruolo == Ruolo.ADMIN:
         color_continuous_scale="Blues",
         labels={"ente": "Ente", "probabilita_media": "Probabilità Media"}
     )
+    fig.update_traces(marker_line_color="rgba(0,0,0,0.15)", marker_line_width=1)
     st.plotly_chart(fig, use_container_width=True)
     st.divider()
 
@@ -74,6 +73,7 @@ if ruolo == Ruolo.ADMIN:
         color_continuous_scale="Reds",
         labels={"ente": "Ente", "probabilita_media": "Probabilità Media"}
     )
+    fig.update_traces(marker_line_color="rgba(0,0,0,0.15)", marker_line_width=1)
     st.plotly_chart(fig, use_container_width=True)
     st.divider()
 
@@ -105,17 +105,18 @@ if ruolo == Ruolo.ADMIN:
         
        
 elif ruolo == Ruolo.VISUALIZZATORE_REGIONALE:
-    st.subheader(f"Pensionamenti per Provincia - {regione}")
+    st.subheader(f"Pensionamenti per Ente - {regione}")
     fig = px.bar(
-        df.groupby("provincia", as_index=False)
+        df.groupby("ente", as_index=False)
         .agg({"probabilita_media":"mean"})
         .sort_values("probabilita_media", ascending=False),
-        x="provincia",
+        x="ente",
         y="probabilita_media",
         color="probabilita_media",
         color_continuous_scale="Viridis",
-        labels={"provincia": "Provincia", "probabilita_media": "Probabilità Media"}
+        labels={"ente": "Ente", "probabilita_media": "Probabilità Media"}
     )
+    fig.update_traces(marker_line_color="rgba(0,0,0,0.15)", marker_line_width=1)
     st.plotly_chart(fig, use_container_width=True)
     
     st.subheader("Qualifiche più esposte")
@@ -129,6 +130,7 @@ elif ruolo == Ruolo.VISUALIZZATORE_REGIONALE:
         color_continuous_scale="Teal",
         labels={"qualifica": "Qualifica", "probabilita_media": "Probabilità Media"}
     )
+    fig.update_traces(marker_line_color="rgba(0,0,0,0.15)", marker_line_width=1)
     st.plotly_chart(fig, use_container_width=True)
     
 elif ruolo == Ruolo.VISUALIZZATORE_PROVINCIALE:
@@ -148,6 +150,7 @@ elif ruolo == Ruolo.VISUALIZZATORE_PROVINCIALE:
         color_continuous_scale="Purples",
         labels={"qualifica": "Qualifica", "probabilita_media": "Probabilità Media"}
     )
+    fig.update_traces(marker_line_color="rgba(0,0,0,0.15)", marker_line_width=1)
     st.plotly_chart(fig, use_container_width=True)
     
 st.divider()

@@ -2,7 +2,6 @@ import streamlit as st
 import plotly.express as px
 from components import topbar, tasto_torna_home
 from database import load_ai_impact, load_future_skills, load_skill_critiche, load_skill_loss
-from style import load_css_tasto_home
 
 
 # ============================================================
@@ -18,7 +17,6 @@ st.set_page_config(page_title="Forecast Workforce Planning",layout="wide")
 
 # Caricamento topbar
 topbar()
-load_css_tasto_home()
 
 st.title("🧠 Strategic Workforce Planning")
 

@@ -3,7 +3,6 @@ import plotly.express as px
 import pandas as pd
 from database import load_burnout
 from components import topbar, tasto_torna_home
-from style import load_css_tasto_home
 
 # ============================================================
 # CONTROLLO LOGIN
@@ -18,7 +17,6 @@ st.set_page_config(page_title="Forecast Workforce Planning",layout="wide")
 
 # Caricamento topbar
 topbar()
-load_css_tasto_home()
 
 st.title("🔥 Burnout Forecast")
 
