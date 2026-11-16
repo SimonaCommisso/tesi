@@ -129,25 +129,32 @@ def load_pensionamenti_nazionali():
     finally:
         conn.close()
 
-# Caricamento dei dati livello Regione
-def load_pensionamenti_regione(regione, ente):
+# Caricamento dei dati livello Regione e Provincia
+def load_pensionamenti(regione=None, provincia=None, ente=None):
     conn = get_connection()
-    try:
-        query = """SELECT * FROM tesi.pubblica_amministrazione_tesi.result_ml1_forecast_pensionamenti_regionale WHERE regione=? AND ente=?"""
-        return pd.read_sql(query, conn, params=(regione,ente))
+    try: 
+        query = "SELECT * FROM tesi.pubblica_amministrazione_tesi.result_ml1_forecast_pensionamenti WHERE 1=1"
+        params = []
+
+        if regione is not None:
+            query += " AND regione = %s"
+            params.append(regione)
+
+        if provincia is not None:
+            query += " AND provincia = %s"
+            params.append(provincia)
+
+        if ente is not None:
+            query += " AND ente = %s"
+            params.append(ente)
+
+        if params:
+            return pd.read_sql(query, conn, params=tuple(params))
+        return pd.read_sql(query, conn)
     finally:
         conn.close()
 
-# Caricamento dei dati livello Provincia
-def load_pensionamenti_provincia(regione, provincia, ente):
-    conn = get_connection()
-    try: 
-        query = """SELECT * FROM tesi.pubblica_amministrazione_tesi.result_ml1_forecast_pensionamenti_provincia WHERE regione=? AND provincia=? AND ente=?"""
-        return pd.read_sql(query, conn, params=(regione, provincia, ente))
-    finally:
-            conn.close()
-
-# Caricamento dei dati livello Provincia
+# Caricamento dei dati annuali
 def load_pensionamenti_annuali(): 
     conn = get_connection()
     try:

@@ -4,7 +4,7 @@ import pandas as pd
 import plotly.express as px
 from style import load_css
 from components import topbar
-from database import load_last_refresh, load_pensionamenti_nazionali, load_pensionamenti_regione, load_pensionamenti_provincia
+from database import load_last_refresh, load_pensionamenti_nazionali, load_pensionamenti
 from streamlit_folium import st_folium
 import folium
 from utility.coordinate import get_coordinate_regione, get_coordinate_provincia
@@ -131,11 +131,11 @@ with col_kpi:
 
         elif ruolo == Ruolo.VISUALIZZATORE_REGIONALE:
             
-            df = load_pensionamenti_regione(regione, ente)
+            df = load_pensionamenti(regione, None, ente)
             df_view = df[(df["regione"] == regione) & (df["ente"] == ente)]
 
         else:
-            df = load_pensionamenti_provincia(regione, provincia, ente)
+            df = load_pensionamenti(regione, provincia, ente)
             df_view = df[(df["regione"] == regione) & (df["provincia"] == provincia) & (df["ente"] == ente)]
 
         # ============================================================

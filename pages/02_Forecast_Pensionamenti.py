@@ -2,8 +2,7 @@ import streamlit as st
 import plotly.express as px
 from database import (
     load_pensionamenti_nazionali,
-    load_pensionamenti_regione,
-    load_pensionamenti_provincia,
+    load_pensionamenti,
     load_pensionamenti_annuali
 )
 from components import topbar, tasto_torna_home
@@ -39,11 +38,11 @@ if ruolo == Ruolo.ADMIN:
     df_annuale = load_pensionamenti_annuali()
 
 elif ruolo == Ruolo.VISUALIZZATORE_REGIONALE:
-    df = load_pensionamenti_regione(regione, ente)
+    df = load_pensionamenti(regione, None, ente)
     df = df[(df["regione"] == regione) & (df["ente"] == ente)]
 
 elif ruolo == Ruolo.VISUALIZZATORE_PROVINCIALE:
-    df = load_pensionamenti_provincia(regione, provincia, ente)
+    df = load_pensionamenti(regione, provincia, ente)
     df = df[(df["regione"] == regione) & (df["provincia"] == provincia) & (df["ente"] == ente)]
 
 else:

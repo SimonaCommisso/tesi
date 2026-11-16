@@ -51,12 +51,10 @@ def load_css_login_page():
         }
     
         .login-subtitle {
-            font-size: 24px;
+            font-size: 20px;
             color: #56606b;
             text-align: center;
             line-height: 1.5;
-            margin-bottom: 5px;
-            margin-top: 20px;
         }
     
         div[data-baseweb="input"] {
@@ -84,7 +82,6 @@ def load_css_login_page():
             background-color:white;
             border-radius:24px;
             padding:35px;
-            margin-bottom: 85px;
         }
     
         </style>""", unsafe_allow_html=True)
