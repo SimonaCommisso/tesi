@@ -173,6 +173,8 @@ with col_kpi:
         st.markdown(f"##### Probabilità Media Pensionamento: {rischio:,}%")
         
         st.write()
+        st.write()
+        st.write()
         # ============================================================
         # Grafico Pensionamenti per Qualifica
         # ============================================================
