@@ -3,6 +3,7 @@ import hashlib
 import pandas as pd
 from database import load_users, load_ente_user
 from style import load_css_login_page
+from utility.costanti import Ruolo
 
 st.set_page_config(
     page_title="HR Analytics Dashboard",
@@ -29,7 +30,6 @@ if not st.session_state.logged:
     with col_center:
         
         with st.container():
-
             col_form, col_img = st.columns([1, 1], gap="large")
 
             # --------------------------------------------------
@@ -81,9 +81,9 @@ if not st.session_state.logged:
                         st.session_state.regione = None
                         st.session_state.provincia = None
                         st.session_state.ente_nome = ""
-                        if user["ruolo"] != "Admin":
-                            st.session_state.regione = user["regione"]
-                            st.session_state.provincia = user["provincia"]
+                        if user["ruolo"] != Ruolo.ADMIN:
+                            st.session_state.regione = None if pd.isna(user["regione"]) else user["regione"]
+                            st.session_state.provincia = None if pd.isna(user["provincia"]) else user["provincia"]
                             if pd.notna(user["ente_id"]):
                                 ente_nome = load_ente_user(st.session_state.ente_id)
                                 if ente_nome.empty:

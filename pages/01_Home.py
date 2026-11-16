@@ -8,6 +8,7 @@ from database import load_last_refresh, load_pensionamenti_nazionali, load_pensi
 from streamlit_folium import st_folium
 import folium
 from utility.coordinate import get_coordinate_regione, get_coordinate_provincia
+from utility.costanti import Ruolo
 
 
 # ============================================================
@@ -33,6 +34,7 @@ HTTP_PATH = st.secrets["databricks"]["sql_warehouse_path"]
 st.set_page_config(page_title="HR Analytics Dashboard", layout="wide")
 
 topbar()
+ruolo = st.session_state.get("ruolo")
 
 st.title("🏛️ Home")
 
@@ -58,6 +60,7 @@ st.markdown("""### Home""")
 
 col_mappa, col_kpi = st.columns([2,1])
 
+
 # ============================================================
 # Grafico Mappa
 # ============================================================
@@ -70,7 +73,7 @@ with col_mappa:
         regione = st.session_state.get("regione")
         provincia = st.session_state.get("provincia")
 
-        if regione is None:
+        if ruolo == Ruolo.ADMIN:
             st.info("🌍 Visualizzazione Nazionale")
             m = folium.Map(
                 location=[42.5, 12.5],
@@ -78,7 +81,7 @@ with col_mappa:
                 tiles="OpenStreetMap"
             )
 
-        elif provincia is None:
+        elif ruolo == Ruolo.VISUALIZZATORE_REGIONALE:
 
             st.success(f"📍 Regione: {regione}")
             lat, lon = get_coordinate_regione(regione)
@@ -94,7 +97,7 @@ with col_mappa:
                 popup=regione
             ).add_to(m)
 
-        else:
+        elif ruolo == Ruolo.VISUALIZZATORE_PROVINCIALE:
 
             st.success(f"📍 Provincia: {provincia}")
 
@@ -122,11 +125,12 @@ with col_kpi:
         provincia = st.session_state.get("provincia")
         ente = st.session_state.get("ente_nome")
 
-        if regione is None and provincia is None:
+        if ruolo == Ruolo.ADMIN:
             df = load_pensionamenti_nazionali()
             df_view = df
 
-        elif provincia is None:
+        elif ruolo == Ruolo.VISUALIZZATORE_REGIONALE:
+            
             df = load_pensionamenti_regione(regione, ente)
             df_view = df[(df["regione"] == regione) & (df["ente"] == ente)]
 
@@ -146,8 +150,9 @@ with col_kpi:
         else:
             rischio = 0
 
-        st.markdown("""#### Pensionamenti Previsti""", f"{totale:,}")
-        st.markdown("""### Probabilità Media Pensionamento""", f"{rischio}%")
+        st.markdown(f"#### Pensionamenti Previsti\n### {totale:,}")
+
+        st.markdown(f"#### Probabilità Media Pensionamento\n### {rischio:,}%")
         
         # ============================================================
         # Grafico Pensionamenti per Qualifica

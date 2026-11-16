@@ -26,7 +26,7 @@ def load_ente_user(ente):
     try:
         query = """SELECT nome AS ente_nome FROM tesi.pubblica_amministrazione_tesi.dim_ente
                     WHERE ente_id = ? """
-        return pd.read_sql(query, conn, params=(ente))
+        return pd.read_sql(query, conn, params=(ente,))
     finally:
         conn.close()
 
