@@ -131,16 +131,16 @@ elif ruolo == Ruolo.VISUALIZZATORE_REGIONALE:
     col1, col2 = st.columns(2, gap="large")
 
     with col1:
-        st.subheader(f"Pensionamenti per Ente - {regione}")
+        st.subheader(f"Pensionamenti per Provincia - {regione}")
         fig_geo = px.bar(
-            df.groupby("ente", as_index=False)
+            df.groupby("provincia", as_index=False)
             .agg({"probabilita_media": "mean"})
             .sort_values("probabilita_media", ascending=False),
-            x="ente",
+            x="provincia",
             y="probabilita_media",
             color="probabilita_media",
             color_continuous_scale=px.colors.sequential.Viridis,
-            labels={"ente": "Ente", "probabilita_media": "Probabilità Media"}
+            labels={"provincia": "Provincia", "probabilita_media": "Probabilità Media"}
         )
         st.plotly_chart(rifinisci_barre(fig_geo), use_container_width=True)
 
