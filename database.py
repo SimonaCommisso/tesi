@@ -132,19 +132,19 @@ def load_pensionamenti_nazionali():
 # Caricamento dei dati livello Regione e Provincia
 def load_pensionamenti(regione=None, provincia=None, ente=None):
     conn = get_connection()
-    try: 
+    try:
         query = "SELECT * FROM tesi.pubblica_amministrazione_tesi.result_ml1_forecast_pensionamenti WHERE 1=1"
         params = []
 
-        if regione is not None:
+        if pd.notna(regione) and str(regione).strip() != "":
             query += " AND regione = %s"
             params.append(regione)
 
-        if provincia is not None:
+        if pd.notna(provincia) and str(provincia).strip() != "":
             query += " AND provincia = %s"
             params.append(provincia)
 
-        if ente is not None:
+        if pd.notna(ente) and str(ente).strip() != "":
             query += " AND ente = %s"
             params.append(ente)
 
@@ -210,15 +210,15 @@ def load_skill_loss_ente(regione=None, provincia=None, ente_id=None):
         query = "SELECT * FROM tesi.pubblica_amministrazione_tesi.result_ml2_skill_loss_ente WHERE 1=1"
         params = []
 
-        if regione is not None:
+        if pd.notna(regione) and str(regione).strip() != "":
             query += " AND regione = %s"
             params.append(regione)
 
-        if provincia is not None:
+        if pd.notna(provincia) and str(provincia).strip() != "":
             query += " AND provincia = %s"
             params.append(provincia)
 
-        if ente_id is not None:
+        if pd.notna(ente_id) and str(ente_id).strip() != "":
             query += " AND ente_id = %s"
             params.append(ente_id)
 
@@ -239,15 +239,15 @@ def load_burnout(regione=None, provincia=None, ente_id=None):
         query = "SELECT * FROM tesi.pubblica_amministrazione_tesi.result_ml3_predictions_burnout WHERE 1=1"
         params = []
 
-        if regione is not None:
+        if pd.notna(regione) and str(regione).strip() != "":
             query += " AND regione = %s"
             params.append(regione)
 
-        if provincia is not None:
+        if pd.notna(provincia) and str(provincia).strip() != "":
             query += " AND provincia = %s"
             params.append(provincia)
 
-        if ente_id is not None:
+        if pd.notna(ente_id) and str(ente_id).strip() != "":
             query += " AND ente_id = %s"
             params.append(ente_id)
 

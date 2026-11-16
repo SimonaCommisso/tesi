@@ -155,7 +155,7 @@ elif ruolo == Ruolo.VISUALIZZATORE_REGIONALE:
     if not regione or ente_id is None:
         mostra_nessun_dato("(Parametri regione o ente mancanti nel profilo)")
     else:
-        df_reg = load_skill_loss_ente(regione, None, ente_id)
+        df_reg = load_skill_loss_ente(regione, provincia, ente_id)
 
         if df_reg is None or df_reg.empty:
             mostra_nessun_dato(f"(Regione: {regione})")
