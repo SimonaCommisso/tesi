@@ -137,15 +137,15 @@ def load_pensionamenti(regione=None, provincia=None, ente=None):
         params = []
 
         if pd.notna(regione) and str(regione).strip() != "":
-            query += " AND regione = %s"
+            query += " AND regione =?"
             params.append(regione)
 
         if pd.notna(provincia) and str(provincia).strip() != "":
-            query += " AND provincia = %s"
+            query += " AND provincia =?"
             params.append(provincia)
 
         if pd.notna(ente) and str(ente).strip() != "":
-            query += " AND ente = %s"
+            query += " AND ente =?"
             params.append(ente)
 
         if params:
@@ -211,15 +211,15 @@ def load_skill_loss_ente(regione=None, provincia=None, ente_id=None):
         params = []
 
         if pd.notna(regione) and str(regione).strip() != "":
-            query += " AND regione = %s"
+            query += " AND regione =?"
             params.append(regione)
 
         if pd.notna(provincia) and str(provincia).strip() != "":
-            query += " AND provincia = %s"
+            query += " AND provincia =?"
             params.append(provincia)
 
         if pd.notna(ente_id) and str(ente_id).strip() != "":
-            query += " AND ente_id = %s"
+            query += " AND ente_id =?"
             params.append(ente_id)
 
         if params:
@@ -240,15 +240,15 @@ def load_burnout(regione=None, provincia=None, ente_id=None):
         params = []
 
         if pd.notna(regione) and str(regione).strip() != "":
-            query += " AND regione = %s"
+            query += " AND regione =?"
             params.append(regione)
 
         if pd.notna(provincia) and str(provincia).strip() != "":
-            query += " AND provincia = %s"
+            query += " AND provincia =?"
             params.append(provincia)
 
         if pd.notna(ente_id) and str(ente_id).strip() != "":
-            query += " AND ente_id = %s"
+            query += " AND ente_id =?"
             params.append(ente_id)
 
         if params:
