@@ -80,8 +80,10 @@ def load_css_login_page():
             color: white;
         }
         
-        .back-white {
-            background-color: white !important;
+        [data-testid="stVerticalBlock"] > div:has(.login-title){
+            background-color:white;
+            border-radius:24px;
+            padding:35px;
         }
     
         </style>""", unsafe_allow_html=True)

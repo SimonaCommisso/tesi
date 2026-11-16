@@ -28,9 +28,8 @@ if not st.session_state.logged:
 
     with col_center:
         
-        with st.container(border=True):
+        with st.container():
 
-            st.markdown("""<div class="back-white">""", unsafe_allow_html=True)
             col_form, col_img = st.columns([1, 1], gap="large")
 
             # --------------------------------------------------
@@ -105,7 +104,6 @@ if not st.session_state.logged:
             with col_img:
                 st.image("./assets/img/HR Analytics Dashboard login.png", use_container_width=True)
             
-            st.markdown("""</div>""")
     st.stop()
 # ============================================================
 # UTENTE GIÀ LOGGATO
