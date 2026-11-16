@@ -115,7 +115,7 @@ if ruolo == Ruolo.ADMIN:
 
     # 4. Perdita di competenze
     with col4:
-        st.subheader("Top 15 Competenze a Rischio Perdita")
+        st.subheader("Top 15 Competenze a Rischio Perdita per Pensionamenti")
         df_loss_top = df_skill_loss.sort_values("percentuale_perdita", ascending=True).tail(15)
         fig4 = px.bar(
             df_loss_top,
@@ -137,7 +137,7 @@ if ruolo == Ruolo.ADMIN:
 # VISTA REGIONALE (KPI + 2 grafici affiancati)
 # ============================================================
 elif ruolo == Ruolo.VISUALIZZATORE_REGIONALE:
-    df_reg = load_skill_loss_ente_reg()
+    df_reg = load_skill_loss_ente_reg(regione, ente)
     df_reg = df_reg[df_reg["regione"] == regione]
     if ente_id is not None and "ente_id" in df_reg.columns:
         df_reg = df_reg[df_reg["ente_id"] == ente_id]
@@ -211,7 +211,7 @@ elif ruolo == Ruolo.VISUALIZZATORE_REGIONALE:
 # VISTA PROVINCIALE (KPI + 2 grafici affiancati)
 # ============================================================
 elif ruolo == Ruolo.VISUALIZZATORE_PROVINCIALE:
-    df_prov = load_skill_loss_ente_prov()
+    df_prov = load_skill_loss_ente_prov(regione, provincia, ente)
     df_prov = df_prov[(df_prov["regione"] == regione) & (df_prov["provincia"] == provincia)]
     if ente_id is not None and "ente_id" in df_prov.columns:
         df_prov = df_prov[df_prov["ente_id"] == ente_id]
