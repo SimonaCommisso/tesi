@@ -21,17 +21,38 @@ def load_css_login_page():
             padding-top: 6rem;
             max-width: 1400px;
         }
+        
+        div[data-testid="stVerticalBlockBorderWrapper"] {
+            background-color: white !important;
+            border-radius: 24px !important;
+            padding: 30px !important;
+            border: none !important;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.18) !important;
+        }
+        
+        [data-testid="stForm"] {
+            border: none !important;
+            background: transparent !important;
+            padding: 0 !important;
+        }
+            
+        .box-image {
+            background: linear-gradient(135deg, #004678, #1d79b8);
+            padding:20px;
+            border-radius:20px;
+        }
     
         .login-title {
-            font-size: 48px;
+            font-size: 52px;
             font-weight: 800;
-            color: #0f2454;
+            color: #002b4f;
+            letter-spacing: 0.5px;
             text-align: center;
             margin-bottom: 8px;
         }
     
         .login-subtitle {
-            font-size: 18px;
+            font-size: 20px;
             color: #56606b;
             text-align: center;
             line-height: 1.5;
@@ -39,19 +60,19 @@ def load_css_login_page():
         }
     
         div[data-baseweb="input"] {
-            border-radius: 12px;
-            border: 1px solid #d9dee5;
-            background-color: #f5f7fa;
+            background: #f4f6f9 !important;
+            border: 1px solid #e3e6ea !important;
+            border-radius: 12px !important;
         }
     
         div[data-testid="stFormSubmitButton"] button {
-            background-color: #004678;
-            color: white;
-            height: 52px;
-            border-radius: 12px;
-            border: none;
-            font-size: 18px;
-            font-weight: 600;
+            background-color: #004678 !important;
+            color: white !important;
+            border-radius: 12px !important;
+            height: 54px !important;
+            font-size: 18px !important;
+            font-weight: 600 !important;
+            border: 0 !important;
         }
     
         div[data-testid="stFormSubmitButton"] button:hover {
