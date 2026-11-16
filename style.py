@@ -79,6 +79,10 @@ def load_css_login_page():
             background-color: #005f9e;
             color: white;
         }
+        
+        .back-white {
+            background-color: white !important;
+        }
     
         </style>""", unsafe_allow_html=True)
     
