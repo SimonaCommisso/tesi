@@ -191,7 +191,7 @@ elif ruolo == Ruolo.VISUALIZZATORE_PROVINCIALE:
             df.groupby("ente", as_index=False)
             .agg({"numero_pensionamenti": "sum"})
             .sort_values("numero_pensionamenti", ascending=False),
-            x="Ente",
+            x="ente",
             y="numero_pensionamenti",
             color="numero_pensionamenti",
             color_continuous_scale=px.colors.sequential.Blues[2:],
