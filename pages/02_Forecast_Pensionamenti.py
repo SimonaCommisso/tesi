@@ -186,16 +186,16 @@ elif ruolo == Ruolo.VISUALIZZATORE_PROVINCIALE:
         st.plotly_chart(rifinisci_barre(fig1), width='stretch')
 
     with col2:
-        st.subheader("Pensionamenti Previsti per Ente")
+        st.subheader("Pensionamenti Previsti per Qualifica")
         fig2 = px.bar(
-            df.groupby("ente", as_index=False)
+            df.groupby("qualifica", as_index=False)
             .agg({"numero_pensionamenti": "sum"})
             .sort_values("numero_pensionamenti", ascending=False),
-            x="ente",
+            x="qualifica",
             y="numero_pensionamenti",
             color="numero_pensionamenti",
             color_continuous_scale=px.colors.sequential.Blues[2:],
-            labels={"ente": "Ente", "numero_pensionamenti": "Pensionamenti Previsti"}
+            labels={"qualifica": "Qualifica", "numero_pensionamenti": "Pensionamenti Previsti"}
         )
         st.plotly_chart(rifinisci_barre(fig2), width='stretch')
 
