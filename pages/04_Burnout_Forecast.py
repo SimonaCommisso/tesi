@@ -204,9 +204,6 @@ if ruolo == Ruolo.ADMIN:
     with col1:
         grafico_burnout_per_qualifica(df)
 
-    st.divider()
-    col3, col4 = st.columns(2, gap="large")
-
     with col2:
         st.subheader("Rischio Burnout per Ente")
         ente_id = "ente" if "ente" in df.columns else ("ente_id" if "ente_id" in df.columns else None)
