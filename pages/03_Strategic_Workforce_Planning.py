@@ -203,7 +203,7 @@ if ruolo == Ruolo.ADMIN:
 
     # 1. Top competenze esposte all'AI (al posto della categoria unica 'operativa')
     with col1:
-        st.subheader("Top 12 Competenze più Esposte all'AI")
+        st.subheader("Top Competenze più Esposte all'AI")
         if df_ai_impact is not None and not df_ai_impact.empty:
             df_ai_top = (
                 df_ai_impact.dropna(subset=["competenza", "rischio_ai"])
