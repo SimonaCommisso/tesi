@@ -163,7 +163,7 @@ with col_kpi:
 
         if len(df_view) > 0:
             rischio = round(
-                df_view["probabilita_media"].mean(), 2)
+                df_view["affinita_storica_media"].mean(), 2)
         else:
             rischio = 0
 
