@@ -263,7 +263,7 @@ def load_burnout(regione=None, provincia=None, ente_id=None):
 def load_ente_name(ente_id):
     conn = get_connection()
     try:
-        query = "SELECT * FROM tesi.pubblica_amministrazione_tesi.dim_ente WHERE ente_id=?"
+        query = "SELECT nome FROM tesi.pubblica_amministrazione_tesi.dim_ente WHERE ente_id=?"
         return pd.read_sql(query, conn, params=[ente_id])
     finally:
         conn.close()

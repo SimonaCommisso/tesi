@@ -206,12 +206,34 @@ if ruolo == Ruolo.ADMIN:
 
     with col2:
         st.subheader("Rischio Burnout per Ente")
-        ente_id = "ente" if "ente" in df.columns else ("ente_id" if "ente_id" in df.columns else None)
-        col_ente = load_ente_name(ente_id)
-        
+        df_plot_ente = df.copy()
+
+        if "ente" in df_plot_ente.columns and not df_plot_ente["ente"].dropna().empty:
+            col_ente = "ente"
+        elif "ente_id" in df_plot_ente.columns and not df_plot_ente["ente_id"].dropna().empty:
+            ids_unici = df_plot_ente["ente_id"].dropna().unique().tolist()
+            mappa_enti = {}
+            for e_id in ids_unici:
+                df_info_ente = load_ente_name(e_id)
+                if df_info_ente is not None and not df_info_ente.empty:
+                    for col_nome in ["nome", "denominazione", "ente"]:
+                        if col_nome in df_info_ente.columns:
+                            mappa_enti[e_id] = df_info_ente[col_nome].iloc[0]
+                            break
+
+            if mappa_enti:
+                df_plot_ente["nome_ente"] = df_plot_ente["ente_id"].map(mappa_enti).fillna(
+                    df_plot_ente["ente_id"].astype(str)
+                )
+                col_ente = "nome_ente"
+            else:
+                col_ente = "ente_id"
+        else:
+            col_ente = None
+
         if col_ente:
             df_ente = (
-                df.dropna(subset=[col_ente])
+                df_plot_ente.dropna(subset=[col_ente])
                 .groupby(col_ente, as_index=False)
                 .agg(
                     prob_media=("probabilita_burnout", "mean"),
@@ -236,6 +258,7 @@ if ruolo == Ruolo.ADMIN:
                 },
             )
             fig3.update_traces(textposition="outside")
+            fig3.update_yaxes(dtick=1)
             st.plotly_chart(applica_stile_grafico(fig3), width="stretch")
         else:
             st.info("Informazione sull'ente non disponibile nei dati.")
