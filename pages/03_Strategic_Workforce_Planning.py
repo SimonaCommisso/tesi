@@ -125,41 +125,41 @@ def render_vista_territoriale(df_terr, titolo_area, gruppo_col):
 
     # Grafico sinistra: Top competenze più ricorrenti tra quelle a rischio
     with col1:
-        st.subheader(f"Competenze più a Rischio — {titolo_area}")
-        if "competenze" in df_terr.columns:
-            serie_comp = normalizza_competenze(df_terr["competenze"])
-            df_exp = (
-                df_terr.assign(_comp=serie_comp)
-                .explode("_comp")
-                .dropna(subset=["_comp"])
-            )
-            df_exp["_comp"] = df_exp["_comp"].astype(str).str.strip()
-            df_exp = df_exp[df_exp["_comp"] != ""]
+        st.subheader(f"Impatto per Territorio — {titolo_area}")
+        asse_dettaglio = (
+            "provincia"
+            if "provincia" in df_terr.columns and df_terr["provincia"].nunique(dropna=True) > 1
+            else ("ente" if "ente" in df_terr.columns else None)
+        )
 
-            if not df_exp.empty:
-                df_comp_counts = (
-                    df_exp.groupby("_comp", as_index=False)
-                    .size()
-                    .rename(columns={"_comp": "competenza", "size": "occorrenze"})
-                    .sort_values("occorrenze", ascending=False)
-                    .head(10)
-                    .sort_values("occorrenze", ascending=True)
+        if asse_dettaglio:
+            df_terr_agg = (
+                df_terr.dropna(subset=[asse_dettaglio])
+                .groupby(asse_dettaglio, as_index=False)
+                .agg(
+                    competenze_a_rischio=("competenze_a_rischio", "sum"),
+                    dipendenti_in_uscita=("dipendenti_in_uscita", "sum"),
                 )
-                fig_left = px.bar(
-                    df_comp_counts,
-                    x="occorrenze",
-                    y="competenza",
-                    orientation="h",
-                    color="occorrenze",
-                    color_continuous_scale=px.colors.sequential.Teal[2:],
-                    text_auto=True,
-                    labels={"occorrenze": "Occorrenze", "competenza": "Competenza"},
-                )
-                st.plotly_chart(rifinisci_grafico(fig_left), width="stretch")
-            else:
-                st.info("Nessun dettaglio sulle singole competenze a rischio per il profilo selezionato.")
+                .sort_values("competenze_a_rischio", ascending=True)
+                .tail(10)
+            )
+            fig_left = px.bar(
+                df_terr_agg,
+                x="competenze_a_rischio",
+                y=asse_dettaglio,
+                orientation="h",
+                color="dipendenti_in_uscita",
+                color_continuous_scale=px.colors.sequential.Teal[2:],
+                text_auto=True,
+                labels={
+                    "competenze_a_rischio": "Competenze a Rischio",
+                    asse_dettaglio: asse_dettaglio.capitalize(),
+                    "dipendenti_in_uscita": "Dipendenti in Uscita",
+                },
+            )
+            st.plotly_chart(rifinisci_grafico(fig_left), width="stretch")
         else:
-            st.info("Colonna 'competenze' non disponibile.")
+            st.info("Nessun dettaglio territoriale disponibile per il profilo selezionato.")
 
     # Grafico destra: Confronto Competenze a Rischio vs Dipendenti in Uscita
     with col2:
