@@ -1,9 +1,9 @@
 import ast
-import streamlit as st
-import plotly.express as px
-import pandas as pd
 import json
 import numpy as np
+import pandas as pd
+import plotly.express as px
+import streamlit as st
 from components import topbar, tasto_torna_home
 from style import load_css_tasto_home
 from utility.costanti import Ruolo
@@ -114,54 +114,89 @@ def filtra_per_ruolo_territoriale(df_in, ruolo_utente, reg_utente, prov_utente, 
     return out
 
 
-def render_vista_territoriale(df_terr, titolo_area, gruppo_col):
-    """Renderizza KPI e 2 grafici chiari per vista Regionale o Provinciale."""
+def mostra_dettaglio_competenze_ente(df_terr, titolo_area):
+    """Mostra in modo leggibile le competenze a rischio per il singolo ente/provincia."""
+    st.subheader(f"Competenze a Rischio Mappate — {titolo_area}")
+
+    competenze_uniche = []
+    if "competenze" in df_terr.columns:
+        serie_comp = normalizza_competenze(df_terr["competenze"])
+        for lista_comp in serie_comp:
+            for item in lista_comp:
+                nome_comp = str(item).strip()
+                if nome_comp and nome_comp not in competenze_uniche:
+                    competenze_uniche.append(nome_comp)
+
+    if not competenze_uniche:
+        st.info("Nessun elenco di singole competenze disponibile per questo profilo.")
+        return
+
+    st.caption(f"Totale competenze distinte elencate: **{len(competenze_uniche)}**")
+
+    df_tab = pd.DataFrame({
+        "N.": range(1, len(competenze_uniche) + 1),
+        "Competenza": competenze_uniche,
+    })
+    st.dataframe(df_tab, hide_index=True, use_container_width=True, height=340)
+
+
+def render_vista_territoriale(df_terr, titolo_area, gruppo_col, is_provinciale=False):
+    """Renderizza KPI e layout dedicato per vista Regionale o Provinciale."""
     k1, k2 = st.columns(2)
-    k1.metric("Competenze a Rischio", int(pd.to_numeric(df_terr["competenze_a_rischio"], errors="coerce").fillna(0).sum()))
-    k2.metric("Dipendenti in Uscita", int(pd.to_numeric(df_terr["dipendenti_in_uscita"], errors="coerce").fillna(0).sum()))
+    k1.metric(
+        "Competenze a Rischio",
+        int(pd.to_numeric(df_terr["competenze_a_rischio"], errors="coerce").fillna(0).sum()),
+    )
+    k2.metric(
+        "Dipendenti in Uscita",
+        int(pd.to_numeric(df_terr["dipendenti_in_uscita"], errors="coerce").fillna(0).sum()),
+    )
 
     st.divider()
     col1, col2 = st.columns(2, gap="large")
 
-    # Grafico sinistra: Top competenze più ricorrenti tra quelle a rischio
+    # Sinistra: per la provincia mostriamo l'elenco delle competenze; per la regione l'impatto territoriale
     with col1:
-        st.subheader(f"Impatto per Territorio — {titolo_area}")
-        asse_dettaglio = (
-            "provincia"
-            if "provincia" in df_terr.columns and df_terr["provincia"].nunique(dropna=True) > 1
-            else ("ente" if "ente" in df_terr.columns else None)
-        )
-
-        if asse_dettaglio:
-            df_terr_agg = (
-                df_terr.dropna(subset=[asse_dettaglio])
-                .groupby(asse_dettaglio, as_index=False)
-                .agg(
-                    competenze_a_rischio=("competenze_a_rischio", "sum"),
-                    dipendenti_in_uscita=("dipendenti_in_uscita", "sum"),
-                )
-                .sort_values("competenze_a_rischio", ascending=True)
-                .tail(10)
-            )
-            fig_left = px.bar(
-                df_terr_agg,
-                x="competenze_a_rischio",
-                y=asse_dettaglio,
-                orientation="h",
-                color="dipendenti_in_uscita",
-                color_continuous_scale=px.colors.sequential.Teal[2:],
-                text_auto=True,
-                labels={
-                    "competenze_a_rischio": "Competenze a Rischio",
-                    asse_dettaglio: asse_dettaglio.capitalize(),
-                    "dipendenti_in_uscita": "Dipendenti in Uscita",
-                },
-            )
-            st.plotly_chart(rifinisci_grafico(fig_left), width="stretch")
+        if is_provinciale:
+            mostra_dettaglio_competenze_ente(df_terr, titolo_area)
         else:
-            st.info("Nessun dettaglio territoriale disponibile per il profilo selezionato.")
+            st.subheader(f"Impatto per Territorio — {titolo_area}")
+            asse_dettaglio = (
+                "provincia"
+                if "provincia" in df_terr.columns and df_terr["provincia"].nunique(dropna=True) > 1
+                else ("ente" if "ente" in df_terr.columns else None)
+            )
 
-    # Grafico destra: Confronto Competenze a Rischio vs Dipendenti in Uscita
+            if asse_dettaglio:
+                df_terr_agg = (
+                    df_terr.dropna(subset=[asse_dettaglio])
+                    .groupby(asse_dettaglio, as_index=False)
+                    .agg(
+                        competenze_a_rischio=("competenze_a_rischio", "sum"),
+                        dipendenti_in_uscita=("dipendenti_in_uscita", "sum"),
+                    )
+                    .sort_values("competenze_a_rischio", ascending=True)
+                    .tail(10)
+                )
+                fig_left = px.bar(
+                    df_terr_agg,
+                    x="competenze_a_rischio",
+                    y=asse_dettaglio,
+                    orientation="h",
+                    color="dipendenti_in_uscita",
+                    color_continuous_scale=px.colors.sequential.Teal[2:],
+                    text_auto=True,
+                    labels={
+                        "competenze_a_rischio": "Competenze a Rischio",
+                        asse_dettaglio: asse_dettaglio.capitalize(),
+                        "dipendenti_in_uscita": "Dipendenti in Uscita",
+                    },
+                )
+                st.plotly_chart(rifinisci_grafico(fig_left), width="stretch")
+            else:
+                st.info("Nessun dettaglio territoriale disponibile per il profilo selezionato.")
+
+    # Destra: Confronto Competenze a Rischio vs Dipendenti in Uscita
     with col2:
         st.subheader(f"Uscite vs Competenze a Rischio — {titolo_area}")
         asse_x = gruppo_col if gruppo_col in df_terr.columns else ("ente" if "ente" in df_terr.columns else None)
@@ -212,7 +247,7 @@ if ruolo == Ruolo.ADMIN:
 
     col1, col2 = st.columns(2, gap="large")
 
-    # 1. Top competenze esposte all'AI (al posto della categoria unica 'operativa')
+    # 1. Top competenze esposte all'AI
     with col1:
         st.subheader("Top Competenze più Esposte all'AI")
         if df_ai_impact is not None and not df_ai_impact.empty:
@@ -400,7 +435,7 @@ elif ruolo == Ruolo.VISUALIZZATORE_PROVINCIALE:
             mostra_nessun_dato(f"(Regione: {regione} — Provincia: {provincia})")
         else:
             render_vista_territoriale(
-                df_prov, f"{provincia} ({regione})", gruppo_col="ente"
+                df_prov, f"{provincia} ({regione})", gruppo_col="ente", is_provinciale=True
             )
 
 else:
