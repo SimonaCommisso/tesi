@@ -1,7 +1,7 @@
 import streamlit as st
 import plotly.express as px
 import pandas as pd
-from database import load_burnout
+from database import load_burnout, load_ente_name
 from components import topbar, tasto_torna_home
 from style import load_css_tasto_home
 from utility.costanti import Ruolo
@@ -202,17 +202,16 @@ if ruolo == Ruolo.ADMIN:
     col1, col2 = st.columns(2, gap="large")
 
     with col1:
-        grafico_burnout_per_sesso(df)
-
-    with col2:
         grafico_burnout_per_qualifica(df)
 
     st.divider()
     col3, col4 = st.columns(2, gap="large")
 
-    with col3:
+    with col2:
         st.subheader("Rischio Burnout per Ente")
-        col_ente = "ente" if "ente" in df.columns else ("ente_id" if "ente_id" in df.columns else None)
+        ente_id = "ente" if "ente" in df.columns else ("ente_id" if "ente_id" in df.columns else None)
+        col_ente = load_ente_name(ente_id)
+        
         if col_ente:
             df_ente = (
                 df.dropna(subset=[col_ente])
@@ -243,39 +242,6 @@ if ruolo == Ruolo.ADMIN:
             st.plotly_chart(applica_stile_grafico(fig3), width="stretch")
         else:
             st.info("Informazione sull'ente non disponibile nei dati.")
-
-    with col4:
-        st.subheader("Rischio Burnout per Regione")
-        if "regione" in df.columns and not df["regione"].dropna().empty:
-            df_reg = (
-                df.dropna(subset=["regione"])
-                .groupby("regione", as_index=False)
-                .agg(
-                    prob_media=("probabilita_burnout", "mean"),
-                    dipendenti=("probabilita_burnout", "count"),
-                )
-                .sort_values("prob_media", ascending=True)
-            )
-            fig4 = px.bar(
-                df_reg,
-                x="prob_media",
-                y="regione",
-                orientation="h",
-                color="prob_media",
-                color_continuous_scale=px.colors.sequential.Purples[2:],
-                text_auto=".1f",
-                hover_data=["dipendenti"],
-                labels={
-                    "prob_media": "Probabilità Media (%)",
-                    "regione": "Regione",
-                    "dipendenti": "Dipendenti",
-                },
-            )
-            fig4.update_traces(textposition="outside")
-            st.plotly_chart(applica_stile_grafico(fig4), width="stretch")
-        else:
-            st.info("Colonna 'regione' non disponibile nei dati.")
-
 
 # ============================================================
 # VISTA REGIONALE / PROVINCIALE (dati già filtrati per ruolo)
