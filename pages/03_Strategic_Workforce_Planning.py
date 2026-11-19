@@ -2,6 +2,8 @@ import ast
 import streamlit as st
 import plotly.express as px
 import pandas as pd
+import json
+import numpy as np
 from components import topbar, tasto_torna_home
 from style import load_css_tasto_home
 from utility.costanti import Ruolo
@@ -62,20 +64,29 @@ def mostra_nessun_dato(dettaglio=""):
 
 
 def normalizza_competenze(serie):
-    """Converte eventuali stringhe array tipo '[\"A\", \"B\"]' in liste Python."""
+    """Converte array numpy, liste o stringhe JSON/array in liste Python."""
     def _parse(val):
+        if val is None or (isinstance(val, float) and pd.isna(val)):
+            return []
+        if isinstance(val, np.ndarray):
+            return [str(x).strip() for x in val.tolist() if x is not None and str(x).strip()]
         if isinstance(val, (list, tuple, set)):
-            return list(val)
+            return [str(x).strip() for x in val if x is not None and str(x).strip()]
         if isinstance(val, str):
             s = val.strip()
+            if not s:
+                return []
             if s.startswith("[") and s.endswith("]"):
-                try:
-                    parsed = ast.literal_eval(s)
-                    return parsed if isinstance(parsed, list) else [s]
-                except Exception:
-                    return [s]
-            return [s] if s else []
-        return []
+                for parser in (json.loads, ast.literal_eval):
+                    try:
+                        parsed = parser(s)
+                        if isinstance(parsed, (list, tuple, set, np.ndarray)):
+                            lista = parsed.tolist() if isinstance(parsed, np.ndarray) else list(parsed)
+                            return [str(x).strip() for x in lista if x is not None and str(x).strip()]
+                    except Exception:
+                        continue
+            return [s]
+        return [str(val).strip()] if str(val).strip() else []
 
     return serie.apply(_parse)
 
