@@ -3,7 +3,7 @@ import plotly.express as px
 from database import (
     load_pensionamenti_nazionali,
     load_pensionamenti,
-    load_pensionamenti_annuali
+    load_pensionamenti_annuali,
 )
 from components import topbar, tasto_torna_home
 from style import load_css_tasto_home
@@ -43,7 +43,11 @@ elif ruolo == Ruolo.VISUALIZZATORE_REGIONALE:
 
 elif ruolo == Ruolo.VISUALIZZATORE_PROVINCIALE:
     df = load_pensionamenti(regione, provincia, ente)
-    df = df[(df["regione"] == regione) & (df["provincia"] == provincia) & (df["ente"] == ente)]
+    df = df[
+        (df["regione"] == regione)
+        & (df["provincia"] == provincia)
+        & (df["ente"] == ente)
+    ]
 
 else:
     st.error("Ruolo non riconosciuto.")
@@ -73,9 +77,9 @@ if ruolo == Ruolo.ADMIN:
             y="affinita_storica_media",
             color="affinita_storica_media",
             color_continuous_scale=px.colors.sequential.Blues[2:],
-            labels={"ente": "Ente", "affinita_storica_media": "Probabilità Media"}
+            labels={"ente": "Ente", "affinita_storica_media": "Affinità Media (%)"},
         )
-        st.plotly_chart(rifinisci_barre(fig1), width='stretch')
+        st.plotly_chart(rifinisci_barre(fig1), width="stretch")
 
     with col2:
         st.subheader("Top 5 Enti a rischio")
@@ -89,38 +93,66 @@ if ruolo == Ruolo.ADMIN:
             orientation="h",
             color="affinita_storica_media",
             color_continuous_scale=px.colors.sequential.Reds[2:],
-            labels={"ente": "Ente", "affinita_storica_media": "Probabilità Media"}
+            labels={"ente": "Ente", "affinita_storica_media": "Affinità Media (%)"},
         )
-        st.plotly_chart(rifinisci_barre(fig2), width='stretch')
+        st.plotly_chart(rifinisci_barre(fig2), width="stretch")
 
     st.divider()
     col3, col4 = st.columns(2, gap="large")
 
     with col3:
         st.subheader("Pensionamento medio per Qualifica")
-        fig3 = px.bar(
+        df_qual_admin = (
             df.groupby("qualifica", as_index=False)
             .agg({"affinita_storica_media": "mean"})
-            .sort_values("affinita_storica_media", ascending=False),
+            .sort_values("affinita_storica_media", ascending=False)
+        )
+        fig3 = px.bar(
+            df_qual_admin,
             x="qualifica",
             y="affinita_storica_media",
+            color="affinita_storica_media",
             color_continuous_scale=px.colors.sequential.Greens[2:],
-            labels={"qualifica": "Qualifica Professionale", "affinita_storica_media": "Probabilità Media"}
+            labels={
+                "qualifica": "Qualifica Professionale",
+                "affinita_storica_media": "Affinità Media (%)",
+            },
         )
-        st.plotly_chart(rifinisci_barre(fig3), width='stretch')
+        st.plotly_chart(rifinisci_barre(fig3), width="stretch")
 
     with col4:
-        st.subheader("Pensionamenti previsti per affinita_storica_media")
+        st.subheader("Pensionamenti previsti per anno")
+        col_anno = (
+            "anno_pensione_stimato"
+            if "anno_pensione_stimato" in df_annuale.columns
+            else "anno"
+        )
+        col_valore = (
+            "numero_dipendenti_stimati"
+            if "numero_dipendenti_stimati" in df_annuale.columns
+            else "count"
+        )
+
+        df_annuale_plot = (
+            df_annuale.dropna(subset=[col_anno, col_valore])
+            .groupby(col_anno, as_index=False)[col_valore]
+            .sum()
+            .sort_values(col_anno)
+        )
+
         fig4 = px.line(
-            df_annuale,
-            x="affinita_storica_media",
-            y="count",
+            df_annuale_plot,
+            x=col_anno,
+            y=col_valore,
             markers=True,
-            labels={"affinita_storica_media": "Anno Pensionamento stimato", "count": "Numero Previsto"}
+            labels={
+                col_anno: "Anno di Riferimento",
+                col_valore: "Numero Previsto",
+            },
         )
         fig4.update_traces(line_color="#FF4B4B", marker=dict(size=8))
         fig4.update_layout(margin=dict(t=20, b=20, l=10, r=10))
-        st.plotly_chart(fig4, width='stretch')
+        st.plotly_chart(fig4, width="stretch")
 
 
 # ===========================================================
@@ -139,9 +171,9 @@ elif ruolo == Ruolo.VISUALIZZATORE_REGIONALE:
             y="affinita_storica_media",
             color="affinita_storica_media",
             color_continuous_scale=px.colors.sequential.Viridis,
-            labels={"provincia": "Provincia", "affinita_storica_media": "Probabilità Media"}
+            labels={"provincia": "Provincia", "affinita_storica_media": "Affinità Media (%)"},
         )
-        st.plotly_chart(rifinisci_barre(fig_geo), width='stretch')
+        st.plotly_chart(rifinisci_barre(fig_geo), width="stretch")
 
     with col2:
         st.subheader("Qualifiche più esposte")
@@ -153,9 +185,9 @@ elif ruolo == Ruolo.VISUALIZZATORE_REGIONALE:
             y="affinita_storica_media",
             color="affinita_storica_media",
             color_continuous_scale=px.colors.sequential.Teal[2:],
-            labels={"qualifica": "Qualifica", "affinita_storica_media": "Probabilità Media"}
+            labels={"qualifica": "Qualifica", "affinita_storica_media": "Affinità Media (%)"},
         )
-        st.plotly_chart(rifinisci_barre(fig_qual), width='stretch')
+        st.plotly_chart(rifinisci_barre(fig_qual), width="stretch")
 
 
 # ===========================================================
@@ -166,13 +198,13 @@ elif ruolo == Ruolo.VISUALIZZATORE_PROVINCIALE:
     with kpi1:
         st.metric("Pensionamenti Previsti", int(df["numero_pensionamenti"].sum()))
     with kpi2:
-        st.metric("Probabilità Media", f"{df['affinita_storica_media'].mean():.2f}%")
+        st.metric("Affinità Media", f"{df['affinita_storica_media'].mean():.2f}%")
 
     st.divider()
     col1, col2 = st.columns(2, gap="large")
 
     with col1:
-        st.subheader("Probabilità Media per Qualifica")
+        st.subheader("Affinità Media per Qualifica")
         fig1 = px.bar(
             df.groupby("qualifica", as_index=False)
             .agg({"affinita_storica_media": "mean"})
@@ -181,9 +213,9 @@ elif ruolo == Ruolo.VISUALIZZATORE_PROVINCIALE:
             y="affinita_storica_media",
             color="affinita_storica_media",
             color_continuous_scale=px.colors.sequential.Purples[2:],
-            labels={"qualifica": "Qualifica", "affinita_storica_media": "Probabilità Media"}
+            labels={"qualifica": "Qualifica", "affinita_storica_media": "Affinità Media (%)"},
         )
-        st.plotly_chart(rifinisci_barre(fig1), width='stretch')
+        st.plotly_chart(rifinisci_barre(fig1), width="stretch")
 
     with col2:
         st.subheader("Pensionamenti Previsti per Qualifica")
@@ -195,9 +227,9 @@ elif ruolo == Ruolo.VISUALIZZATORE_PROVINCIALE:
             y="numero_pensionamenti",
             color="numero_pensionamenti",
             color_continuous_scale=px.colors.sequential.Blues[2:],
-            labels={"qualifica": "Qualifica", "numero_pensionamenti": "Pensionamenti Previsti"}
+            labels={"qualifica": "Qualifica", "numero_pensionamenti": "Pensionamenti Previsti"},
         )
-        st.plotly_chart(rifinisci_barre(fig2), width='stretch')
+        st.plotly_chart(rifinisci_barre(fig2), width="stretch")
 
 st.divider()
 tasto_torna_home()
