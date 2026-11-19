@@ -10,7 +10,7 @@ from database import (
     load_future_skills,
     load_skill_critiche,
     load_skill_loss,
-    load_skill_loss_ente
+    load_skill_loss_ente,
 )
 
 # ============================================================
@@ -42,7 +42,7 @@ def rifinisci_grafico(fig, is_bar=True):
     fig.update_layout(
         margin=dict(t=40, b=20, l=10, r=10),
         title_font_size=16,
-        xaxis_title=None
+        xaxis_title=None,
     )
     return fig
 
@@ -52,7 +52,7 @@ def mostra_nessun_dato(dettaglio=""):
     st.info(
         f"📭 **Non sono presenti dati per questa casistica.** {dettaglio}\n\n"
         "Non risultano competenze a rischio o uscite previste associate al tuo profilo territoriale.",
-        icon="ℹ️"
+        icon="ℹ️",
     )
 
 
@@ -89,11 +89,11 @@ if ruolo == Ruolo.ADMIN:
             orientation="h",
             color="rischio_ai",
             color_continuous_scale=px.colors.sequential.OrRd[2:],
-            text_auto=".1f",
-            labels={"rischio_ai": "Rischio AI Medio", "categoria_skill": "Categoria"}
+            text_auto=".2f",
+            labels={"rischio_ai": "Rischio AI Medio", "categoria_skill": "Categoria"},
         )
         fig1.update_traces(textposition="outside")
-        st.plotly_chart(rifinisci_grafico(fig1), width='stretch')
+        st.plotly_chart(rifinisci_grafico(fig1), width="stretch")
 
     # 2. Competenze future con maggiore crescita
     with col2:
@@ -106,9 +106,9 @@ if ruolo == Ruolo.ADMIN:
             orientation="h",
             color="domanda_prevista",
             color_continuous_scale=px.colors.sequential.Blues[2:],
-            labels={"domanda_prevista": "Domanda Prevista", "nome": "Competenza"}
+            labels={"domanda_prevista": "Domanda Prevista", "nome": "Competenza"},
         )
-        st.plotly_chart(rifinisci_grafico(fig2), width='stretch')
+        st.plotly_chart(rifinisci_grafico(fig2), width="stretch")
 
     st.divider()
     col3, col4 = st.columns(2, gap="large")
@@ -117,16 +117,22 @@ if ruolo == Ruolo.ADMIN:
     with col3:
         st.subheader("Top 15 Competenze Critiche")
         df_crit_top = df_skill_critiche.sort_values("indice_criticita", ascending=True).tail(15)
+        col_colore_crit = (
+            "categoria_skill" if "categoria_skill" in df_crit_top.columns else "indice_criticita"
+        )
         fig3 = px.bar(
             df_crit_top,
             x="indice_criticita",
             y="nome",
             orientation="h",
-            color="strategica",
-            color_discrete_map={True: "#d9534f", False: "#5bc0de", "Si": "#d9534f", "No": "#5bc0de"},
-            labels={"indice_criticita": "Indice di Criticità", "nome": "Competenza", "strategica": "Strategica"}
+            color=col_colore_crit,
+            labels={
+                "indice_criticita": "Indice di Criticità",
+                "nome": "Competenza",
+                "categoria_skill": "Categoria Skill",
+            },
         )
-        st.plotly_chart(rifinisci_grafico(fig3), width='stretch')
+        st.plotly_chart(rifinisci_grafico(fig3), width="stretch")
 
     # 4. Perdita di competenze
     with col4:
@@ -142,10 +148,10 @@ if ruolo == Ruolo.ADMIN:
             labels={
                 "percentuale_perdita": "% Perdita Prevista",
                 "nome": "Competenza",
-                "indice_criticita_sostituzione": "Criticità Sost."
-            }
+                "indice_criticita_sostituzione": "Criticità Sost.",
+            },
         )
-        st.plotly_chart(rifinisci_grafico(fig4), width='stretch')
+        st.plotly_chart(rifinisci_grafico(fig4), width="stretch")
 
 
 # ============================================================
@@ -160,7 +166,6 @@ elif ruolo == Ruolo.VISUALIZZATORE_REGIONALE:
         if df_reg is None or df_reg.empty:
             mostra_nessun_dato(f"(Regione: {regione})")
         else:
-            # KPI
             k1, k2, k3 = st.columns(3)
             k1.metric("Competenze a Rischio", int(df_reg["competenze_a_rischio"].sum()))
             k2.metric("Dipendenti in Uscita", int(df_reg["dipendenti_in_uscita"].sum()))
@@ -169,7 +174,6 @@ elif ruolo == Ruolo.VISUALIZZATORE_REGIONALE:
             st.divider()
             col1, col2 = st.columns(2, gap="large")
 
-            # Grafico 1: Top competenze a rischio
             with col1:
                 st.subheader(f"Competenze più a Rischio - {regione}")
                 df_reg["competenze"] = normalizza_competenze(df_reg["competenze"])
@@ -190,24 +194,23 @@ elif ruolo == Ruolo.VISUALIZZATORE_REGIONALE:
                         orientation="h",
                         color="frequenza",
                         color_continuous_scale=px.colors.sequential.Teal[2:],
-                        labels={"frequenza": "Occorrenze a Rischio", "competenza": "Competenza"}
+                        labels={"frequenza": "Occorrenze a Rischio", "competenza": "Competenza"},
                     )
-                    st.plotly_chart(rifinisci_grafico(fig_r1), width='stretch')
+                    st.plotly_chart(rifinisci_grafico(fig_r1), width="stretch")
                 else:
                     st.info("Nessun dettaglio sulle singole competenze disponibile.")
 
-            # Grafico 2: Confronto Competenze a Rischio vs Dipendenti in Uscita
             with col2:
                 st.subheader("Impatto Uscite vs Competenze a Rischio")
                 df_melt = df_reg.melt(
                     id_vars=["ente"],
                     value_vars=["competenze_a_rischio", "dipendenti_in_uscita"],
                     var_name="Indicatore",
-                    value_name="Valore"
+                    value_name="Valore",
                 )
                 df_melt["Indicatore"] = df_melt["Indicatore"].replace({
                     "competenze_a_rischio": "Competenze a Rischio",
-                    "dipendenti_in_uscita": "Dipendenti in Uscita"
+                    "dipendenti_in_uscita": "Dipendenti in Uscita",
                 })
                 fig_r2 = px.bar(
                     df_melt,
@@ -216,9 +219,9 @@ elif ruolo == Ruolo.VISUALIZZATORE_REGIONALE:
                     color="Indicatore",
                     barmode="group",
                     text_auto=True,
-                    color_discrete_sequence=["#2b5c8f", "#e06d53"]
+                    color_discrete_sequence=["#2b5c8f", "#e06d53"],
                 )
-                st.plotly_chart(rifinisci_grafico(fig_r2), width='stretch')
+                st.plotly_chart(rifinisci_grafico(fig_r2), width="stretch")
 
 
 # ============================================================
@@ -233,7 +236,6 @@ elif ruolo == Ruolo.VISUALIZZATORE_PROVINCIALE:
         if df_prov is None or df_prov.empty:
             mostra_nessun_dato(f"(Regione: {regione} - Provincia: {provincia})")
         else:
-            # KPI
             k1, k2 = st.columns(2)
             k1.metric("Competenze a Rischio", int(df_prov["competenze_a_rischio"].sum()))
             k2.metric("Dipendenti in Uscita", int(df_prov["dipendenti_in_uscita"].sum()))
@@ -241,7 +243,6 @@ elif ruolo == Ruolo.VISUALIZZATORE_PROVINCIALE:
             st.divider()
             col1, col2 = st.columns(2, gap="large")
 
-            # Grafico 1: Top competenze a rischio nella provincia
             with col1:
                 st.subheader(f"Competenze più a Rischio - {provincia}")
                 df_prov["competenze"] = normalizza_competenze(df_prov["competenze"])
@@ -262,24 +263,23 @@ elif ruolo == Ruolo.VISUALIZZATORE_PROVINCIALE:
                         orientation="h",
                         color="frequenza",
                         color_continuous_scale=px.colors.sequential.Purples[2:],
-                        labels={"frequenza": "Occorrenze a Rischio", "competenza": "Competenza"}
+                        labels={"frequenza": "Occorrenze a Rischio", "competenza": "Competenza"},
                     )
-                    st.plotly_chart(rifinisci_grafico(fig_p1), width='stretch')
+                    st.plotly_chart(rifinisci_grafico(fig_p1), width="stretch")
                 else:
                     st.info("Nessun dettaglio sulle singole competenze disponibile.")
 
-            # Grafico 2: Confronto Dipendenti in Uscita vs Competenze a Rischio
             with col2:
                 st.subheader("Dipendenti in Uscita vs Competenze a Rischio")
                 df_melt = df_prov.melt(
                     id_vars=["ente"],
                     value_vars=["competenze_a_rischio", "dipendenti_in_uscita"],
                     var_name="Indicatore",
-                    value_name="Valore"
+                    value_name="Valore",
                 )
                 df_melt["Indicatore"] = df_melt["Indicatore"].replace({
                     "competenze_a_rischio": "Competenze a Rischio",
-                    "dipendenti_in_uscita": "Dipendenti in Uscita"
+                    "dipendenti_in_uscita": "Dipendenti in Uscita",
                 })
                 fig_p2 = px.bar(
                     df_melt,
@@ -288,9 +288,9 @@ elif ruolo == Ruolo.VISUALIZZATORE_PROVINCIALE:
                     color="Indicatore",
                     barmode="group",
                     text_auto=True,
-                    color_discrete_sequence=["#5e3c99", "#e66101"]
+                    color_discrete_sequence=["#5e3c99", "#e66101"],
                 )
-                st.plotly_chart(rifinisci_grafico(fig_p2), width='stretch')
+                st.plotly_chart(rifinisci_grafico(fig_p2), width="stretch")
 
 else:
     st.error("Ruolo non riconosciuto.")
