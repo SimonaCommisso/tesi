@@ -7,7 +7,7 @@ from style import load_css_tasto_home
 from utility.costanti import Ruolo
 
 # ============================================================
-# CONFIGURAZIONE PAGINA (sempre prima istruzione Streamlit)
+# CONFIGURAZIONE PAGINA (sempre come prima istruzione Streamlit)
 # ============================================================
 st.set_page_config(page_title="Burnout Forecast", layout="wide")
 
@@ -57,7 +57,7 @@ if df is None or df.empty:
     st.info(
         "📭 **Non sono presenti dati per questa casistica.**\n\n"
         "Non risultano previsioni di burnout associate al tuo profilo territoriale.",
-        icon="ℹ️"
+        icon="ℹ️",
     )
     st.divider()
     tasto_torna_home()
@@ -82,7 +82,7 @@ mappa_colori_burnout = {
     "Medio": "#f0ad4e",
     "medio": "#f0ad4e",
     "Basso": "#5cb85c",
-    "basso": "#5cb85c"
+    "basso": "#5cb85c",
 }
 
 # ============================================================
@@ -92,25 +92,29 @@ col1, col2 = st.columns(2, gap="large")
 
 with col1:
     st.subheader("Distribuzione Rischio Burnout")
-    df_pie = df.groupby("livello_burnout", as_index=False).size().rename(columns={"size": "totale"})
+    df_pie = (
+        df.groupby("livello_burnout", as_index=False)
+        .size()
+        .rename(columns={"size": "totale"})
+    )
     fig1 = px.pie(
         df_pie,
         names="livello_burnout",
         values="totale",
-        hole=0.4,
+        hole=0.45,
         color="livello_burnout",
-        color_discrete_map=mappa_colori_burnout
+        color_discrete_map=mappa_colori_burnout,
     )
     fig1.update_traces(textposition="inside", textinfo="percent+label")
     fig1.update_layout(margin=dict(t=20, b=20, l=10, r=10))
-    st.plotly_chart(fig1, width='stretch')
+    st.plotly_chart(fig1, width="stretch")
 
 with col2:
     st.subheader("Burnout Medio per Fascia d'Età")
     df["fascia_eta"] = pd.cut(
         df["eta_calcolata"],
         bins=[18, 30, 40, 50, 60, 75],
-        labels=["18-30", "31-40", "41-50", "51-60", "60+"]
+        labels=["18-30", "31-40", "41-50", "51-60", "60+"],
     )
     df_eta = (
         df.groupby("fascia_eta", as_index=False, observed=False)["probabilita_burnout"]
@@ -124,54 +128,91 @@ with col2:
         color="probabilita_burnout",
         color_continuous_scale=px.colors.sequential.OrRd[2:],
         text_auto=".1f",
-        labels={"fascia_eta": "Fascia d'Età", "probabilita_burnout": "Probabilità Media (%)"}
+        labels={
+            "fascia_eta": "Fascia d'Età",
+            "probabilita_burnout": "Probabilità Media (%)",
+        },
     )
-    fig2.update_traces(marker_line_color="rgba(0,0,0,0.2)", marker_line_width=1, textposition="outside")
+    fig2.update_traces(
+        marker_line_color="rgba(0,0,0,0.2)",
+        marker_line_width=1,
+        textposition="outside",
+    )
     fig2.update_layout(margin=dict(t=20, b=20, l=10, r=10))
-    st.plotly_chart(fig2, width='stretch')
+    st.plotly_chart(fig2, width="stretch")
 
 st.divider()
 
 # ============================================================
-# RIGA 2: STRAORDINARI VS BURNOUT + PERFORMANCE VS BURNOUT
+# RIGA 2: BURNOUT PER FASCE DI STRAORDINARI + QUOTA RISCHIO PER PERFORMANCE
 # ============================================================
 col3, col4 = st.columns(2, gap="large")
 
 with col3:
-    st.subheader("Straordinari vs Burnout")
-    fig3 = px.scatter(
-        df,
-        x="ore_straordinario_2025",
-        y="probabilita_burnout",
-        color="livello_burnout",
-        color_discrete_map=mappa_colori_burnout,
-        opacity=0.75,
+    st.subheader("Probabilità Media Burnout per Fasce di Straordinario")
+    df["fascia_straordinari"] = pd.cut(
+        df["ore_straordinario_2025"],
+        bins=[-1, 50, 100, 150, 200, 1000],
+        labels=["0-50h", "51-100h", "101-150h", "151-200h", "200h+"],
+    )
+    df_straord = (
+        df.groupby("fascia_straordinari", as_index=False, observed=False)
+        .agg(
+            prob_media=("probabilita_burnout", "mean"),
+            dipendenti=("probabilita_burnout", "count"),
+        )
+        .dropna()
+    )
+    fig3 = px.bar(
+        df_straord,
+        x="fascia_straordinari",
+        y="prob_media",
+        color="prob_media",
+        color_continuous_scale=px.colors.sequential.Reds[2:],
+        text_auto=".1f",
+        hover_data=["dipendenti"],
         labels={
-            "ore_straordinario_2025": "Ore Straordinario (2025)",
-            "probabilita_burnout": "Probabilità Burnout (%)",
-            "livello_burnout": "Livello"
-        }
+            "fascia_straordinari": "Ore Straordinario (2025)",
+            "prob_media": "Probabilità Media (%)",
+            "dipendenti": "Dipendenti",
+        },
+    )
+    fig3.update_traces(
+        marker_line_color="rgba(0,0,0,0.2)",
+        marker_line_width=1,
+        textposition="outside",
     )
     fig3.update_layout(margin=dict(t=20, b=20, l=10, r=10))
-    st.plotly_chart(fig3, width='stretch')
+    st.plotly_chart(fig3, width="stretch")
 
 with col4:
-    st.subheader("Performance vs Burnout")
-    fig4 = px.scatter(
-        df,
-        x="performance_2025",
-        y="probabilita_burnout",
-        color="livello_burnout",
-        color_discrete_map=mappa_colori_burnout,
-        opacity=0.75,
-        labels={
-            "performance_2025": "Valutazione Performance (2025)",
-            "probabilita_burnout": "Probabilità Burnout (%)",
-            "livello_burnout": "Livello"
-        }
+    st.subheader("Distribuzione Livello Burnout per Fascia di Performance")
+    df["fascia_performance"] = pd.cut(
+        df["performance_2025"],
+        bins=[0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.5],
+        labels=["<=2.5", "2.6-3.0", "3.1-3.5", "3.6-4.0", "4.1-4.5", "4.6-5.0"],
     )
+    df_perf_liv = (
+        df.groupby(["fascia_performance", "livello_burnout"], as_index=False, observed=False)
+        .size()
+        .rename(columns={"size": "dipendenti"})
+    )
+    fig4 = px.bar(
+        df_perf_liv,
+        x="fascia_performance",
+        y="dipendenti",
+        color="livello_burnout",
+        barmode="stack",
+        color_discrete_map=mappa_colori_burnout,
+        labels={
+            "fascia_performance": "Fascia Performance (2025)",
+            "dipendenti": "Numero Dipendenti",
+            "livello_burnout": "Livello Burnout",
+        },
+    )
+    fig4.update_traces(marker_line_color="rgba(0,0,0,0.2)", marker_line_width=1)
     fig4.update_layout(margin=dict(t=20, b=20, l=10, r=10))
-    st.plotly_chart(fig4, width='stretch')
+    st.plotly_chart(fig4, width="stretch")
 
 st.divider()
 tasto_torna_home()
