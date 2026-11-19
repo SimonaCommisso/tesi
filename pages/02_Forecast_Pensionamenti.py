@@ -110,13 +110,13 @@ if ruolo == Ruolo.ADMIN:
         st.plotly_chart(rifinisci_barre(fig3), width='stretch')
 
     with col4:
-        st.subheader("Pensionamenti previsti per anno")
+        st.subheader("Pensionamenti previsti per affinita_storica_media")
         fig4 = px.line(
             df_annuale,
-            x="anno",
+            x="affinita_storica_media",
             y="count",
             markers=True,
-            labels={"anno": "Anno di Riferimento", "count": "Numero Previsto"}
+            labels={"affinita_storica_media": "Anno Pensionamento stimato", "count": "Numero Previsto"}
         )
         fig4.update_traces(line_color="#FF4B4B", marker=dict(size=8))
         fig4.update_layout(margin=dict(t=20, b=20, l=10, r=10))
